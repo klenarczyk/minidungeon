@@ -1,15 +1,11 @@
-﻿using MiniDungeon.Entities;
-using MiniDungeon.World;
+﻿using MiniDungeon.Components;
 
 namespace MiniDungeon.Items.Wealth;
 
-public class GoldItem() : Item("gold")
+public class GoldItem() : WealthItem("gold")
 {
-    public override bool OnPickup(Player player, Cell cell)
+    public override void AddToPurse(Purse purse, int amount = 1)
     {
-        if (!cell.TryRemoveItem(this)) return false;
-        
-        player.Purse.TryAddGold(1);
-        return true;
+        purse.TryAddGold(amount);
     }
 }
