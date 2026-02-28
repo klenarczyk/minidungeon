@@ -1,4 +1,4 @@
-﻿namespace MiniDungeon.Entities;
+﻿namespace MiniDungeon.Components;
 
 public class Attributes
 {
