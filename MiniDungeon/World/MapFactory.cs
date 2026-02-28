@@ -4,46 +4,26 @@ public static class MapFactory
 {
     private static string _mapText =
         """
-        eeeeeeeeeeeeeeeeeeee
-        ewwwwwewwwwwwewwwwwe
-        eweeeweweeeeweweeewe
-        eeeeeweeeeeeweeeeewe
-        eweeeweweeeeweweeewe
-        eweeeweweeeeweweeewe
-        ewwwwwewwwwwwewwwwwe
-        eeeeeeeeeeeeeeeeeeee
-        eeeeeeeeeeeeeeeeeeee
-        ewwwwwewwwwwwewwwwwe
-        eweeeweweeeeweweeewe
-        eweeeeeweeeeeeweeeee
-        eweeeweweeeeweweeewe
-        eweeeweweeeeweweeewe
-        ewwwwwewwwwwwewwwwwe
-        eeeeeeeeeeeeeeeeeeee
-        eeeeeeeeeeeeeeeeeeee
-        ewwwwwewwwwwwewwwwwe
-        eeeeeweeeeeeweeeeewe
-        eweeeweweeeeweweeewe
-        eweeeweweeeeweweeewe
-        eweeeweweeeeweweeewe
-        ewwwwwewwwwwwewwwwwe
-        eeeeeeeeeeeeeeeeeeee
-        eeeeeeeeeeeeeeeeeeee
-        ewwwwwewwwwwwewwwwwe
-        eweeeweweeeeweweeewe
-        eweeeeeweeeeeeweeeee
-        eweeeweweeeeweweeewe
-        eeeeeweeeeeeweeeeewe
-        ewwwwwewwwwwwewwwwwe
-        eeeeeeeeeeeeeeeeeeee
-        eeeeeeeeeeeeeeeeeeee
-        ewwwwwewwwwwwewwwwwe
-        eweeeweweeeeweweeewe
-        eweeeweweeeeweweeewe
-        eweeeeeweeeeeeweeeee
-        eweeeweweeeeweweeewe
-        ewwwwwewwwwwwewwwwwe
-        eeeeeeeeeeeeeeeeeeee
+        ...##.............................##....
+        .................##...............##....
+        ......###........####..............##...
+        .#######...........................##...
+        .##..........#####....###...........##..
+        .##........#######....###...........##..
+        ###........#####......###..........##...
+        .....................##.................
+        .......######.............#####.........
+        ........######...........########.......
+        ........######.............#######......
+        .......######...............######......
+        ........................................
+        ...................................##...
+        ...###..........###....###.........####.
+        ...###..........###....####.........###.
+        ...###...........##......##.........###.
+        .................####...................
+        .........###......###.......###.........
+        ........####...............#####........
         """;
     
     public static Board Create()
@@ -56,11 +36,11 @@ public static class MapFactory
         {
             switch (c)
             {
-                case 'e':
+                case '.':
                     board.Cells[i, j] = new Cell { Type = CellType.Empty };
                     j++;
                     break;
-                case 'w':
+                case '#':
                     board.Cells[i, j] = new Cell { Type = CellType.Wall };
                     j++;
                     break;

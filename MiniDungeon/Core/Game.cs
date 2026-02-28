@@ -6,6 +6,7 @@ public class Game
     
     public void Run()
     {
+        Renderer.Init();
         Renderer.Draw(_session);
     }
 }

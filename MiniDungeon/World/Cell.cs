@@ -8,5 +8,5 @@ public enum CellType
 
 public class Cell
 {
-    public CellType Type { get; set; }
+    public CellType Type { get; init; }
 }
