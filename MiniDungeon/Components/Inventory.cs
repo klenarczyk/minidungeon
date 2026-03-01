@@ -18,4 +18,6 @@ public class Inventory(int capacity = 9)
         _items.Add(item);
         return true;
     }
+
+    public bool TryRemove(InventoryItem item) => _items.Remove(item);
 }

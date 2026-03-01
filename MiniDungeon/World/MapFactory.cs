@@ -41,13 +41,13 @@ public static class MapFactory
             switch (c)
             {
                 case '.':
-                    board.Cells[i, j] = new Cell { Type = CellType.Empty };
+                    board[j, i] = new Cell { Type = CellType.Empty };
                     if (Random.Shared.NextDouble() < 0.3) 
-                        AddRandomItem(board.Cells[i, j]);
+                        AddRandomItem(board[j, i]);
                     j++;
                     break;
                 case '#':
-                    board.Cells[i, j] = new Cell { Type = CellType.Wall };
+                    board[j, i] = new Cell { Type = CellType.Wall };
                     j++;
                     break;
                 case '\r':

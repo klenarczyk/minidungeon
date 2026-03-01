@@ -7,18 +7,19 @@ public class Renderer
 {
     public static void Init()
     {
+        Console.CursorVisible = false;
         Console.Clear();
     }
     
     public static void Draw(GameSession session)
     {
-        Console.SetCursorPosition(0, 0);
+        Console.Clear();
         
         for (var i = 0; i < Board.Rows; i++)
         {
             for (var j = 0; j < Board.Columns; j++)
             {
-                DrawCell(session.Board.Cells[i, j]);
+                DrawCell(session.Board[j, i]);
             }
             DrawCell(new Cell{ Type = CellType.Wall });
             Console.WriteLine();
@@ -26,6 +27,14 @@ public class Renderer
         
         for (var i = 0; i < Board.Columns + 1; i++)
             DrawCell(new Cell{ Type = CellType.Wall });
+        Console.WriteLine();
+
+        for (var i = 0; i < session.Player.Inventory.Count; i++)
+        {
+            Console.WriteLine($"{i}. {session.Player.Inventory.Items[i].Name}");
+        }
+        
+        Console.WriteLine(session.Message);
         
         var playerX = session.Player.Position.X ; 
         var playerY = session.Player.Position.Y;
@@ -34,8 +43,6 @@ public class Renderer
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.Write("¶");
         Console.ResetColor();
-        
-        Console.SetCursorPosition(0, 21);
     }
 
     private static void DrawCell(Cell cell)
@@ -43,7 +50,10 @@ public class Renderer
         switch (cell.Type)
         {
             case CellType.Empty:
-                Console.Write(" ");
+                if (cell.Items.Count == 0)
+                    Console.Write(" ");
+                else 
+                    Console.Write(cell.Items[0].Name[0]);
                 break;
             case CellType.Wall:
                 Console.ForegroundColor = ConsoleColor.Magenta;
