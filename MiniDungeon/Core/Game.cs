@@ -4,19 +4,18 @@ public class Game
 {
     private readonly GameSession _session = new();
     private readonly InputHandler _inputHandler = new();
+    private readonly Renderer _renderer = new(80, 24);
     
     public void Run()
     {
-        Renderer.Init();
-        Renderer.Draw(_session);
+        _renderer.Init();
 
         while (_session.IsRunning)
         {
-            var command = _inputHandler.GetCommand();
-            if (command == null) continue;
+            _renderer.Render(_session);
             
-            command.Execute(_session);
-            Renderer.Draw(_session);
+            var command = _inputHandler.GetCommand();
+            command?.Execute(_session);
         }
     }
 }
