@@ -7,21 +7,25 @@ public class DropCommand : ICommand
     public void Execute(GameSession session)
     {
         var player = session.Player;
+        var inv = player.Inventory;
         var cell = session.Board[player.Position];
 
-        if (player.Inventory.Count <= 0) return;
+        if (inv.Count <= 0 || inv.SelectedSlot < 0 || inv.SelectedSlot >= inv.Count) return;
 
-        var item = player.Inventory.Items[0];
-        if (player.Inventory.TryRemove(item))
+        var selectedSlot = inv.SelectedSlot;
+        if (inv.TryRemoveAt(selectedSlot, out var item))
         {
-            if (!cell.TryAddItem(item))
-                session.Message = $"Failed to drop {item.Name}.";
-
-            session.Message = $"You dropped {item.Name}.";
-
+            if (!cell.TryAddItem(item!))
+            {
+                inv.TryAddAt(item!, selectedSlot);
+                session.Message = $"Failed to drop {item!.Name}.";
+                return;
+            }
+            
+            session.Message = $"You dropped {item!.Name}.";
             return;
         }
         
-        session.Message = $"Failed to drop {item.Name}.";
+        session.Message = $"Failed to drop item.";
     }
 }

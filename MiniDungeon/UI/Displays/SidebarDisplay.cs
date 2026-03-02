@@ -33,7 +33,9 @@ public class SidebarDisplay : IDisplayElement
         // Inventory
         for (var i = 0; i < inventory.Capacity; i++)
         {
-            buffer.SetString(textX, 9 + i, $"{i + 1}. {(i < inventory.Count ? inventory.Items[i].Name : "-")}");
+            var prefix = inventory.SelectedSlot == i ? "> " : "";
+            
+            buffer.SetString(textX, 9 + i, $"{prefix}{i + 1}. {(i < inventory.Count ? inventory.Items[i].Name : "-")}");
         }
         
         // Dropped Items

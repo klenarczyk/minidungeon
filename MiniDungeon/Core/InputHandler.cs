@@ -12,6 +12,15 @@ public class InputHandler
         { ConsoleKey.D, new MoveCommand(1, 0) },
         { ConsoleKey.E, new PickUpCommand() },
         { ConsoleKey.Q, new DropCommand() },
+        { ConsoleKey.D1, new SelectItemCommand(0)},
+        { ConsoleKey.D2, new SelectItemCommand(1)},
+        { ConsoleKey.D3, new SelectItemCommand(2)},
+        { ConsoleKey.D4, new SelectItemCommand(3)},
+        { ConsoleKey.D5, new SelectItemCommand(4)},
+        { ConsoleKey.D6, new SelectItemCommand(5)},
+        { ConsoleKey.D7, new SelectItemCommand(6)},
+        { ConsoleKey.D8, new SelectItemCommand(7)},
+        { ConsoleKey.D9, new SelectItemCommand(8)},
         { ConsoleKey.Escape, new ExitCommand() }
     };
     
