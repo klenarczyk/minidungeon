@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Core;
+﻿using MiniDungeon.Components;
+using MiniDungeon.Core;
 
 namespace MiniDungeon.UI.Displays;
 
@@ -13,6 +14,7 @@ public class SidebarDisplay : IDisplayElement
     {
         var player = session.Player;
         var inventory = player.Inventory;
+        var equipment = player.Equipment;
         var purse = player.Purse;
         var attribs = player.Attributes;
         var cell = session.Board[player.Position];
@@ -27,8 +29,18 @@ public class SidebarDisplay : IDisplayElement
         buffer.SetString(textX, 4, $"Gold: {purse.Gold,-3} Coins: {purse.Coins,-3}");
         
         // Equipment
-        buffer.SetString(textX, 6, "Left: Empty");
-        buffer.SetString(textX, 7, "Right: Empty");
+        var left = equipment[EquipmentSlot.LeftHand] != null 
+            ? equipment[EquipmentSlot.LeftHand]!.Name 
+            : "(Empty)";
+        
+        var right = equipment[EquipmentSlot.RightHand] != null 
+            ? equipment[EquipmentSlot.LeftHand] == equipment[EquipmentSlot.RightHand]
+                ? "(In use)" 
+                : equipment[EquipmentSlot.RightHand]!.Name 
+            : "(Empty)";
+        
+        buffer.SetString(textX, 6, $"Left:  {left}");
+        buffer.SetString(textX, 7, $"Right: {right}");
         
         // Inventory
         for (var i = 0; i < inventory.Capacity; i++)

@@ -13,19 +13,19 @@ public class DropCommand : ICommand
         if (inv.Count <= 0 || inv.SelectedSlot < 0 || inv.SelectedSlot >= inv.Count) return;
 
         var selectedSlot = inv.SelectedSlot;
-        if (inv.TryRemoveAt(selectedSlot, out var item))
+        if (inv.TryRemove(selectedSlot, out var item))
         {
             if (!cell.TryAddItem(item!))
             {
-                inv.TryAddAt(item!, selectedSlot);
-                session.Message = $"Failed to drop {item!.Name}.";
+                inv.TryAdd(item!, selectedSlot);
+                session.Message = $"Failed to drop the {item!.Name}.";
                 return;
             }
             
-            session.Message = $"You dropped {item!.Name}.";
+            session.Message = $"You dropped the {item!.Name}.";
             return;
         }
         
-        session.Message = $"Failed to drop item.";
+        session.Message = "Failed to drop the item.";
     }
 }

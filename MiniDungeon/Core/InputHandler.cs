@@ -1,4 +1,5 @@
 ﻿using MiniDungeon.Commands;
+using MiniDungeon.Components;
 
 namespace MiniDungeon.Core;
 
@@ -12,6 +13,8 @@ public class InputHandler
         { ConsoleKey.D, new MoveCommand(1, 0) },
         { ConsoleKey.E, new PickUpCommand() },
         { ConsoleKey.Q, new DropCommand() },
+        { ConsoleKey.L, new EquipCommand(EquipmentSlot.LeftHand) },
+        { ConsoleKey.R, new EquipCommand(EquipmentSlot.RightHand) },
         { ConsoleKey.D1, new SelectItemCommand(0)},
         { ConsoleKey.D2, new SelectItemCommand(1)},
         { ConsoleKey.D3, new SelectItemCommand(2)},

@@ -14,10 +14,10 @@ public class PickUpCommand : ICommand
         var item = cell.Items[0];
         if (!item.OnPickup(player, cell))
         {
-            session.Message = $"Failed to pick up {item.Name}. Check your inventory space?";
+            session.Message = "Inventory full!";
             return;
         } 
         
-        session.Message = $"You picked up {item.Name}.";
+        session.Message = $"You picked up the {item.Name}.";
     }
 }

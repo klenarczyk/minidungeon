@@ -63,7 +63,7 @@ public class RenderBuffer
         sb.Append(ResetColor);
         
         // Controls
-        sb.Append("\nMove (WASD), pick up (E), drop (Q), quit (Esc)");
+        sb.Append("\nMove (WASD), Pick up (E), Drop (Q), Inventory (1-9), Equip/Unequip (L/R), Quit (Esc)");
         
         Console.SetCursorPosition(0, 0);
         Console.Write(sb.ToString());

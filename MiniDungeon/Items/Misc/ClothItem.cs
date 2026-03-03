@@ -1,3 +1,3 @@
 ﻿namespace MiniDungeon.Items.Misc;
 
-public class ClothItem() : InventoryItem("cloth");
+public class ClothItem() : MiscItem("cloth");
