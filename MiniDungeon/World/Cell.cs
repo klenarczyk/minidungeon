@@ -12,10 +12,10 @@ public class Cell
 {
     public CellType Type { get; init; }
     
-    private readonly List<Item> _items = [];
-    public IReadOnlyList<Item> Items => _items;
+    private readonly List<IItem> _items = [];
+    public IReadOnlyList<IItem> Items => _items;
     
-    public bool TryAddItem(Item item)
+    public bool TryAddItem(IItem item)
     {
         if (Type == CellType.Wall) return false;
         
@@ -23,5 +23,5 @@ public class Cell
         return true;
     }
     
-    public bool TryRemoveItem(Item item) => _items.Remove(item);
+    public bool TryRemoveItem(IItem item) => _items.Remove(item);
 }

@@ -68,7 +68,7 @@ public static class MapFactory
     {
         
         var rand = Random.Shared.Next() % 8;
-        Item item = rand switch
+        IItem item = rand switch
         {
             0 => new SwordItem(),
             1 => new AxeItem(),

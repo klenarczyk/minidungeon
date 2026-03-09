@@ -30,13 +30,13 @@ public class SidebarDisplay : IDisplayElement
         
         // Equipment
         var left = equipment[EquipmentSlot.LeftHand] != null 
-            ? equipment[EquipmentSlot.LeftHand]!.Name 
+            ? equipment[EquipmentSlot.LeftHand]!.GetName() 
             : "(Empty)";
         
         var right = equipment[EquipmentSlot.RightHand] != null 
             ? equipment[EquipmentSlot.LeftHand] == equipment[EquipmentSlot.RightHand]
                 ? "(In use)" 
-                : equipment[EquipmentSlot.RightHand]!.Name 
+                : equipment[EquipmentSlot.RightHand]!.GetName() 
             : "(Empty)";
         
         buffer.SetString(textX, 6, $"Left:  {left}");
@@ -47,7 +47,7 @@ public class SidebarDisplay : IDisplayElement
         {
             var prefix = inventory.SelectedSlot == i ? "> " : "";
             
-            buffer.SetString(textX, 9 + i, $"{prefix}{i + 1}. {(i < inventory.Count ? inventory.Items[i].Name : "-")}");
+            buffer.SetString(textX, 9 + i, $"{prefix}{i + 1}. {(i < inventory.Count ? inventory.Items[i].GetName() : "-")}");
         }
         
         // Dropped Items
@@ -60,7 +60,7 @@ public class SidebarDisplay : IDisplayElement
                 break;
             }
             
-            buffer.SetString(textX, 19 + i, $"{(char)(a+i)}) {cell.Items[i].Name}");
+            buffer.SetString(textX, 19 + i, $"{(char)(a+i)}) {cell.Items[i].GetName()}");
         }
     }
 

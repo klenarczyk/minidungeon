@@ -4,9 +4,11 @@ using MiniDungeon.World;
 
 namespace MiniDungeon.Items;
 
-public abstract class InventoryItem(string name) : Item(name)
+public abstract class InventoryItem(string name) : IItem
 {
-    public override bool OnPickup(Player player, Cell cell)
+    public string GetName() => name;
+    
+    public bool OnPickup(Player player, Cell cell)
     {
         if (!cell.TryRemoveItem(this)) return false;
         if (!player.Inventory.TryAdd(this))

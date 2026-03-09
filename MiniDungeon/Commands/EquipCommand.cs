@@ -25,12 +25,12 @@ public class EquipCommand(EquipmentSlot slot) : ICommand
             equipment.TryUnequip(slot, out item);
             inventory.TryAdd(item!);
             
-            session.Message = $"You unequipped the {item!.Name}.";
+            session.Message = $"You unequipped the {item!.GetName()}.";
             return;
         };
 
         session.Message = item.OnEquip(player, slot) 
-            ? $"You equipped the {item.Name}." 
-            : $"Cannot equip the two-handed {item.Name}.";
+            ? $"You equipped the {item.GetName()}." 
+            : $"Cannot equip the two-handed {item.GetName()}.";
     }
 }

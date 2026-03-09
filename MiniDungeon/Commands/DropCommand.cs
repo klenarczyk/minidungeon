@@ -18,11 +18,11 @@ public class DropCommand : ICommand
             if (!cell.TryAddItem(item!))
             {
                 inv.TryAdd(item!, selectedSlot);
-                session.Message = $"Failed to drop the {item!.Name}.";
+                session.Message = $"Failed to drop the {item!.GetName()}.";
                 return;
             }
             
-            session.Message = $"You dropped the {item!.Name}.";
+            session.Message = $"You dropped the {item!.GetName()}.";
             return;
         }
         

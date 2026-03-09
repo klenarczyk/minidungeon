@@ -4,11 +4,13 @@ using MiniDungeon.World;
 
 namespace MiniDungeon.Items;
 
-public abstract class WealthItem(string name) : Item(name)
+public abstract class WealthItem(string name) : IItem
 {
     public abstract void AddToPurse(Purse purse, int amount = 1);
+
+    public string GetName() => name;
     
-    public override bool OnPickup(Player player, Cell cell)
+    public bool OnPickup(Player player, Cell cell)
     {
         if (!cell.TryRemoveItem(this)) return false;
         

@@ -18,6 +18,6 @@ public class PickUpCommand : ICommand
             return;
         } 
         
-        session.Message = $"You picked up the {item.Name}.";
+        session.Message = $"You picked up the {item.GetName()}.";
     }
 }
