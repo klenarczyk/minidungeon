@@ -21,6 +21,8 @@ public class MessageDisplay : IDisplayElement
 
     private static void DrawFrame(RenderBuffer buffer)
     {
+        RendererUtils.DrawTitle(buffer, 0, StartY - 1, Board.Columns + 2, " MESSAGE ");
+        
         buffer.SetChar(0, StartY, '│');
         buffer.SetChar(Board.Columns + 1, StartY, '│');
         for (var x = 1; x < Board.Columns + 1; x++)

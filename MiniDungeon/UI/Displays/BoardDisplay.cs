@@ -50,13 +50,7 @@ public class BoardDisplay : IDisplayElement
             buffer.SetChar(0, y, '│');
             buffer.SetChar(Board.Columns + 1, y, '│');
         }
-        
-        const string title = " BOARD ";
-        var startX = Board.Columns / 2 - title.Length / 2 + 1; 
 
-        for (var i = 0; i < title.Length; i++)
-        {
-            buffer.SetChar(startX + i, 0, title[i]);
-        }
+        RendererUtils.DrawTitle(buffer, 0, 0, Board.Columns + 2, " BOARD ");
     }
 }

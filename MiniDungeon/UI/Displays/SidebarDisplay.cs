@@ -1,5 +1,7 @@
 ﻿using MiniDungeon.Components;
 using MiniDungeon.Core;
+using MiniDungeon.Entities;
+using MiniDungeon.World;
 
 namespace MiniDungeon.UI.Displays;
 
@@ -8,27 +10,41 @@ public class SidebarDisplay : IDisplayElement
     private const int StartX = 43;
     private const int StartY = 0;
     private const int Width = 35; 
-    private const int Height = 23; 
+    private const int Height = 23;
+    private const int TextX = StartX + 2;
     
     public void Draw(RenderBuffer buffer, GameSession session)
     {
         var player = session.Player;
         var inventory = player.Inventory;
-        var equipment = player.Equipment;
-        var purse = player.Purse;
-        var attribs = player.Attributes;
         var cell = session.Board[player.Position];
         
         DrawFrame(buffer, inventory.Count);
-        
-        const int textX = StartX + 2;
 
-        // Player
-        buffer.SetString(textX, 1, $"HP:  {attribs.Health,-3} STR: {attribs.Strength,-3} DEF: {attribs.Defense,-3}");
-        buffer.SetString(textX, 2, $"INT: {attribs.Intelligence,-3} AGG: {attribs.Aggression,-3} LCK: {attribs.Luck,-3}");
-        buffer.SetString(textX, 4, $"Gold: {purse.Gold,-3} Coins: {purse.Coins,-3}");
+        DrawPlayerInfo(buffer, player);
+        DrawEquipment(buffer, player);
+        DrawInventory(buffer, player);
+        DrawDroppedItems(buffer, cell);
+    }
+
+    private static void DrawPlayerInfo(RenderBuffer buffer, Player player)
+    {
+        var purse = player.Purse;
+        var attribs = player.Attributes;
         
-        // Equipment
+        buffer.SetString(TextX, 1, 
+            $"HP:  {attribs.Health,-3} STR: {attribs.Strength,-3} DEF: {attribs.Defense,-3}");
+        buffer.SetString(TextX, 2, 
+            $"INT: {attribs.Intelligence,-3} AGG: {attribs.Aggression,-3} LCK: {attribs.Luck,
+            -3}");
+        buffer.SetString(TextX, 4, 
+            $"Gold: {purse.Gold,-3} Coins: {purse.Coins,-3}");
+    }
+
+    private static void DrawEquipment(RenderBuffer buffer, Player player)
+    {
+        var equipment = player.Equipment;
+        
         var left = equipment[EquipmentSlot.LeftHand] != null 
             ? equipment[EquipmentSlot.LeftHand]!.GetName() 
             : "(Empty)";
@@ -39,32 +55,39 @@ public class SidebarDisplay : IDisplayElement
                 : equipment[EquipmentSlot.RightHand]!.GetName() 
             : "(Empty)";
         
-        buffer.SetString(textX, 6, $"Left:  {left}");
-        buffer.SetString(textX, 7, $"Right: {right}");
+        buffer.SetString(TextX, 6, $"Left:  {left}");
+        buffer.SetString(TextX, 7, $"Right: {right}");
+    }
+    
+    private static void DrawInventory(RenderBuffer buffer, Player player)
+    {
+        var inventory = player.Inventory;
         
-        // Inventory
         for (var i = 0; i < inventory.Capacity; i++)
         {
             var prefix = inventory.SelectedSlot == i ? "> " : "";
+            var item = i < inventory.Count ? inventory.Items[i].GetName() : "-";
             
-            buffer.SetString(textX, 9 + i, $"{prefix}{i + 1}. {(i < inventory.Count ? inventory.Items[i].GetName() : "-")}");
+            buffer.SetString(TextX, 9 + i, $"{prefix}{i + 1}. {item}");
         }
-        
-        // Dropped Items
+    }
+    
+    private static void DrawDroppedItems(RenderBuffer buffer, Cell cell)
+    {
         const int a = 'a';
         for (var i = 0; i < cell.Items.Count; i++)
         {
             if (i == 3 && cell.Items.Count > 4)
             {
-                buffer.SetString(textX, 19 + i, $"... ({cell.Items.Count - 3} more)");
+                buffer.SetString(TextX, 19 + i, $"... ({cell.Items.Count - 3} more)");
                 break;
             }
             
-            buffer.SetString(textX, 19 + i, $"{(char)(a+i)}) {cell.Items[i].GetName()}");
+            buffer.SetString(TextX, 19 + i, $"{(char)(a+i)}) {cell.Items[i].GetName()}");
         }
     }
-
-    private void DrawFrame(RenderBuffer buffer, int inventoryCount = 0)
+    
+    private static void DrawFrame(RenderBuffer buffer, int inventoryCount = 0)
     {
         const int endX = StartX + Width;
         const int endY = StartY + Height;
@@ -86,13 +109,13 @@ public class SidebarDisplay : IDisplayElement
             buffer.SetChar(endX, y, '│');
         }
         
-        DrawTitle(buffer, StartY, " PLAYER ");
+        RendererUtils.DrawTitle(buffer, StartX, StartY, Width, " PLAYER ");
         DrawDivider(buffer, 5, " EQUIPMENT ");
         DrawDivider(buffer, 8, $" INVENTORY ({inventoryCount}/9) ");
         DrawDivider(buffer, 18, " DROPPED ");
     }
 
-    private void DrawDivider(RenderBuffer buffer, int y, string title)
+    private static void DrawDivider(RenderBuffer buffer, int y, string title)
     {
         const int endX = StartX + Width;
         
@@ -104,15 +127,6 @@ public class SidebarDisplay : IDisplayElement
             buffer.SetChar(x, y, '─');
         }
 
-        DrawTitle(buffer, y, title);
-    }
-
-    private void DrawTitle(RenderBuffer buffer, int y, string title)
-    {
-        var startX = StartX + Width / 2 - title.Length / 2;
-        for (var i = 0; i < title.Length; i++)
-        {
-            buffer.SetChar(startX + i, y, title[i]);
-        }
+        RendererUtils.DrawTitle(buffer, StartX, y, Width, title);
     }
 }
