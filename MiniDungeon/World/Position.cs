@@ -1,7 +1,7 @@
 ﻿namespace MiniDungeon.World;
 
-public class Position(int x = 0, int y = 0)
+public readonly struct Position(int x = 0, int y = 0)
 {
-    public int X { get; set; } = x;
-    public int Y { get; set; } = y;
+    public int X { get; init; } = x;
+    public int Y { get; init; } = y;
 }

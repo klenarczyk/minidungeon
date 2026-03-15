@@ -12,8 +12,7 @@ public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
         var y = player.Position.Y + deltaY;
 
         if (!IsValidMove(session, x, y)) return;
-        player.Position.X = x;
-        player.Position.Y = y;
+        player.Position = new Position(x, y);
     }
     
     private static bool IsValidMove(GameSession session, int x, int y)
