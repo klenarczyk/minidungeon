@@ -8,6 +8,7 @@ public class DungeonDirector
             .InitializeFilled()
             .AddCentralRoom(10, 5)
             .AddRooms()
+            .AddCorridors()
             .AddItems(30)
             .AddWeapons()
             .Build();

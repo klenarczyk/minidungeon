@@ -3,9 +3,9 @@ using MiniDungeon.World;
 
 namespace MiniDungeon.Entities;
 
-public class Player(int startX = 0, int startY = 0)
+public class Player(Position startingPosition)
 {
-    public Position Position { get; set; } = new(startX, startY);
+    public Position Position { get; set; } = startingPosition;
     public Attributes Attributes { get; } = new();
     public Inventory Inventory { get; } = new();
     public Equipment Equipment { get; } = new();

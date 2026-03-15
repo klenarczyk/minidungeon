@@ -4,6 +4,7 @@ public class Board
 {
     public const int Rows = 20;
     public const int Columns = 40;
+    public Position StartingPosition { get; set; } = new();
     
     private readonly Cell[,] _cells = new Cell[Rows, Columns];
 

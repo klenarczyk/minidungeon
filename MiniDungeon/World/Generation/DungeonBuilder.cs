@@ -8,6 +8,7 @@ public class DungeonBuilder : IDungeonBuilder
     public IDungeonBuilder InitializeEmpty()
     {
         _rooms.Clear();
+        _board.StartingPosition = new Position();
         
         for (var x = 0; x < Board.Columns; x++)
         for (var y = 0; y < Board.Rows; y++)
@@ -21,6 +22,7 @@ public class DungeonBuilder : IDungeonBuilder
     public IDungeonBuilder InitializeFilled()
     {
         _rooms.Clear();
+        _board.StartingPosition = new Position();
         
         for (var x = 0; x < Board.Columns; x++)
         for (var y = 0; y < Board.Rows; y++)
@@ -33,6 +35,35 @@ public class DungeonBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddCorridors()
     {
+        if (_rooms.Count < 1) return this;
+        
+        // Prim's algo for linking rooms
+        var visited = new List<Room> { _rooms[0] };
+        var unvisited = _rooms.Skip(1).ToList();
+        
+        while (unvisited.Count > 0)
+        {
+            var minDist = float.MaxValue;
+            Room? roomA = null;
+            Room? roomB = null;
+
+            foreach (var r1 in visited)
+            foreach (var r2 in unvisited)
+            {
+                var dist = GetDistance(r1.Center, r2.Center);
+                if (!(dist < minDist)) continue;
+                minDist = dist;
+                roomA = r1;
+                roomB = r2;
+            }
+
+            if (roomA == null || roomB == null) continue;
+            ConnectRooms(roomA.Center, roomB.Center);
+                
+            visited.Add(roomB);
+            unvisited.Remove(roomB);
+        }
+        
         return this;
     }
 
@@ -57,6 +88,11 @@ public class DungeonBuilder : IDungeonBuilder
             if (!_rooms.Any(r => r.Intersects(room)))
             {
                 AddRoom(room);
+
+                if (_board.StartingPosition is { X: 0, Y: 0 } && _board[0, 0].Type == CellType.Wall)
+                {
+                    _board.StartingPosition = room.Center;
+                }
             }
         }
         
@@ -74,6 +110,8 @@ public class DungeonBuilder : IDungeonBuilder
         var room = new Room(x, y, width, height);
         AddRoom(room);
         
+        _board.StartingPosition = room.Center;
+        
         return this;
     }
 
@@ -87,8 +125,16 @@ public class DungeonBuilder : IDungeonBuilder
         return this;
     }
 
-    public Board Build() => _board;
-    
+    public Board Build()
+    {
+        if (_board.StartingPosition is { X: 0, Y: 0 } && _board[0, 0].Type == CellType.Wall)
+        {
+            _board[0, 0] = new Cell {  Type = CellType.Empty };
+        } 
+        
+        return _board;
+    }
+
     // Helpers
     private void AddRoom(Room room)
     {
@@ -99,5 +145,38 @@ public class DungeonBuilder : IDungeonBuilder
         {
             _board[x, y] = new Cell { Type = CellType.Empty };
         }
+    }
+
+    private void ConnectRooms(Position roomA, Position roomB)
+    {
+        var random = new Random();
+
+        var startX = Math.Min(roomA.X, roomB.X);
+        var startY =  Math.Min(roomA.Y, roomB.Y);
+        
+        var endX = Math.Max(roomA.X, roomB.X);
+        var endY =  Math.Max(roomA.Y, roomB.Y);
+        
+        if (random.Next(0, 1) == 0)
+        {
+            for (var x = startX; x <= endX; x++)
+                _board[x, roomA.Y] = new Cell { Type = CellType.Empty };
+
+            for (var y = startY; y <= endY; y++)
+                _board[roomB.X, y] = new Cell { Type = CellType.Empty };
+            
+            return;
+        }
+        
+        for (var x = startX; x <= endX; x++)
+            _board[x, roomA.Y] = new Cell { Type = CellType.Empty };
+
+        for (var y = startY; y <= endY; y++)
+            _board[roomB.X, y] = new Cell { Type = CellType.Empty };
+    }
+    
+    private float GetDistance(Position p1, Position p2)
+    {
+        return (float)Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
     }
 }

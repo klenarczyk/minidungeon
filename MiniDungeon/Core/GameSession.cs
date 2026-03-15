@@ -17,6 +17,6 @@ public class GameSession
         var director = new DungeonDirector();
         
         Board = director.CreateStandardDungeon(dungeonBuilder);
-        Player = new Player(Board.Columns / 2, Board.Rows / 2);
+        Player = new Player(Board.StartingPosition);
     }
 }
