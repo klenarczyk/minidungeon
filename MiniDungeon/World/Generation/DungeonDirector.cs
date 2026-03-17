@@ -9,7 +9,7 @@ public class DungeonDirector
             .AddCentralRoom(10, 5)
             .AddRooms()
             .AddCorridors()
-            .AddItems(30)
+            .AddItems(20)
             .AddWeapons()
             .Build();
     }

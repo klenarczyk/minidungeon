@@ -4,10 +4,8 @@ using MiniDungeon.World;
 
 namespace MiniDungeon.Items;
 
-public abstract class WealthItem(string name) : IItem
+public class WealthItem(string name, Action<Purse, int>? addToPurse = null) : IItem
 {
-    public abstract void AddToPurse(Purse purse, int amount = 1);
-
     public string GetName() => name;
     
     public bool OnPickup(Player player, Cell cell)
@@ -16,5 +14,10 @@ public abstract class WealthItem(string name) : IItem
         
         AddToPurse(player.Purse);
         return true;
+    }
+
+    public void AddToPurse(Purse purse, int amount = 1)
+    {
+        addToPurse?.Invoke(purse, amount);
     }
 }

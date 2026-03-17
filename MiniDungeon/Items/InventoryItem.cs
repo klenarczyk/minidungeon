@@ -4,7 +4,7 @@ using MiniDungeon.World;
 
 namespace MiniDungeon.Items;
 
-public abstract class InventoryItem(string name) : IItem
+public class InventoryItem(string name) : IItem
 {
     public string GetName() => name;
     

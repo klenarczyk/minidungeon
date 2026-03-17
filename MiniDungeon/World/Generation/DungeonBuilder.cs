@@ -1,4 +1,7 @@
-﻿namespace MiniDungeon.World.Generation;
+﻿using MiniDungeon.Items;
+using MiniDungeon.Providers;
+
+namespace MiniDungeon.World.Generation;
 
 public class DungeonBuilder : IDungeonBuilder
 {
@@ -117,11 +120,45 @@ public class DungeonBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddItems(int count)
     {
+        var misc = new MiscItemFactory();
+        var wealth = new WealthFactory();
+
+        var freeCells = _board.GetFreeCells();
+        if (freeCells.Count == 0) return this;
+        
+        var random = new Random();
+        for (var i = 0; i < count; i++)
+        {
+            var cell = freeCells[random.Next(freeCells.Count)];
+            var type = random.Next(10);
+            IItem item;
+            
+            item = (type < 3) 
+                ? wealth.GetRandomWealth() 
+                : misc.GetRandomItem();
+
+            cell.TryAddItem(item);
+        }
+
         return this;
     }
 
     public IDungeonBuilder AddWeapons()
     {
+        var weapon = new WeaponFactory();
+
+        var freeCells = _board.GetFreeCells();
+        if (freeCells.Count == 0) return this;
+        
+        var random = new Random();
+        for (var i = 0; i < random.Next(10); i++)
+        {
+            var cell = freeCells[random.Next(freeCells.Count)];
+            var item = weapon.GetRandomWeapon();
+            
+            cell.TryAddItem(item);
+        }
+
         return this;
     }
 
