@@ -139,7 +139,7 @@ public class DungeonBuilder : IDungeonBuilder
 
             cell.TryAddItem(item);
         }
-
+        
         return this;
     }
 
@@ -151,7 +151,7 @@ public class DungeonBuilder : IDungeonBuilder
         if (freeCells.Count == 0) return this;
         
         var random = new Random();
-        for (var i = 0; i < random.Next(10); i++)
+        for (var i = 0; i < random.Next(3, 10); i++)
         {
             var cell = freeCells[random.Next(freeCells.Count)];
             var item = weapon.GetRandomWeapon();

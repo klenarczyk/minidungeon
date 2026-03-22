@@ -9,5 +9,4 @@ public interface IDungeonBuilder
     IDungeonBuilder AddCentralRoom(int width, int height);
     IDungeonBuilder AddItems(int count);
     IDungeonBuilder AddWeapons();
-    Board Build();
 }

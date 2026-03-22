@@ -7,6 +7,7 @@ public class RenderBuffer
     private readonly DisplayInfo[,] _buffer;
     public int Width { get; }
     public int Height { get; }
+    public string Instructions { get; set; }
     
     private const string ResetColor = "\e[0m";
 
@@ -62,8 +63,8 @@ public class RenderBuffer
         }
         sb.Append(ResetColor);
         
-        // Controls
-        sb.Append("\nMove (WASD), Pick up (E), Drop (Q), Inventory (1-9), Equip/Unequip (L/R), Quit (Esc)");
+        if (!string.IsNullOrWhiteSpace(Instructions))
+            sb.Append($"\n{Instructions}");
         
         Console.SetCursorPosition(0, 0);
         Console.Write(sb.ToString());

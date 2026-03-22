@@ -16,7 +16,7 @@ public class Renderer
         _components.Add(new SidebarDisplay());
         _components.Add(new MessageDisplay());
     }
-
+    
     public void Render(GameSession session)
     {
         _buffer.Clear();
@@ -34,4 +34,6 @@ public class Renderer
         Console.Clear();
         Console.CursorVisible = false;
     }
+    
+    public void UpdateInstructions(string instructions) => _buffer.Instructions = instructions;
 } 

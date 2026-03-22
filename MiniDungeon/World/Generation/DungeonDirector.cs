@@ -2,15 +2,14 @@
 
 public class DungeonDirector
 {
-    public Board CreateStandardDungeon(IDungeonBuilder builder)
+    public void CreateStandardDungeon(IDungeonBuilder builder)
     {
-        return builder
+        builder
             .InitializeFilled()
             .AddCentralRoom(10, 5)
             .AddRooms()
             .AddCorridors()
             .AddItems(20)
-            .AddWeapons()
-            .Build();
+            .AddWeapons();
     }
 }
