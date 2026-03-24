@@ -3,11 +3,15 @@ using MiniDungeon.World.Generation;
 
 namespace MiniDungeon.Core;
 
-public class Game
+public class Game : IGameContext
 {
-    private readonly GameSession _session;
-    private readonly IHandler? _inputChain;
+    public GameSession Session { get; }
     private readonly Renderer _renderer = new(80, 24);
+    
+    private readonly Stack<IHandler> _inputChains = new();
+    
+    public void PushInputChain(IHandler chainHead) =>  _inputChains.Push(chainHead);
+    public void PopInputChain() =>  _inputChains.Pop();
 
     public Game()
     {
@@ -17,23 +21,31 @@ public class Game
         
         director.CreateStandardDungeon(dungeonBuilder);
         director.CreateStandardDungeon(instructionBuilder);
-        
-        _inputChain = instructionBuilder.GetInputChain();
-        _renderer.UpdateInstructions(instructionBuilder.GetInstructions());
-        
-        _session = new GameSession(dungeonBuilder.Build());
+
+        var baseInputChain = instructionBuilder.GetInputChain();
+        if (baseInputChain != null)
+        {
+            PushInputChain(baseInputChain);
+            _renderer.UpdateInstructions(instructionBuilder.GetInstructions());
+        }
+    
+        Session = new GameSession(dungeonBuilder.Build());
     }
     
     public void Run()
     {
         _renderer.Init();
 
-        while (_session.IsRunning)
+        while (Session.IsRunning)
         {
-            _renderer.Render(_session);
-            
-            var command = _inputChain?.Handle(Console.ReadKey(true).Key);
-            command?.Execute(_session);
+            _renderer.Render(Session);
+
+            if (_inputChains.Count == 0) Session.IsRunning = false;
+            var currentChain = _inputChains.Peek();
+
+            var key = Console.ReadKey(true).Key;
+            var command = currentChain.Handle(key);
+            command.Execute(this);
         }
     }
 }

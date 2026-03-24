@@ -4,8 +4,8 @@ namespace MiniDungeon.Commands;
 
 public class ExitCommand : ICommand
 {
-    public void Execute(GameSession session)
+    public void Execute(IGameContext context)
     {
-        session.IsRunning = false;
+        context.Session.IsRunning = false;
     }
 }

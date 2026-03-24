@@ -4,5 +4,5 @@ namespace MiniDungeon.Commands;
 
 public interface ICommand
 {
-    void Execute(GameSession session);
+    void Execute(IGameContext context);
 }

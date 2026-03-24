@@ -5,8 +5,9 @@ namespace MiniDungeon.Commands;
 
 public class EquipCommand(EquipmentSlot slot) : ICommand
 {
-    public void Execute(GameSession session)
+    public void Execute(IGameContext context)
     {
+        var session = context.Session;
         var player = session.Player;
         var inventory = session.Player.Inventory;
         var equipment = session.Player.Equipment;

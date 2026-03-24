@@ -4,8 +4,9 @@ namespace MiniDungeon.Commands;
 
 public class DropCommand : ICommand
 {
-    public void Execute(GameSession session)
+    public void Execute(IGameContext context)
     {
+        var session = context.Session;
         var player = session.Player;
         var inv = player.Inventory;
         var cell = session.Board[player.Position];

@@ -4,8 +4,9 @@ namespace MiniDungeon.Commands;
 
 public class PickUpCommand : ICommand
 {
-    public void Execute(GameSession session)
+    public void Execute(IGameContext context)
     {
+        var session = context.Session;
         var player = session.Player;
         var cell = session.Board[player.Position];
 

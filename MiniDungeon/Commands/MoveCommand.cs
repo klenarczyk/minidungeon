@@ -5,8 +5,9 @@ namespace MiniDungeon.Commands;
 
 public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
 {
-    public void Execute(GameSession session)
+    public void Execute(IGameContext context)
     {
+        var session = context.Session;
         var player = session.Player;
         var x = player.Position.X + deltaX;
         var y = player.Position.Y + deltaY;
