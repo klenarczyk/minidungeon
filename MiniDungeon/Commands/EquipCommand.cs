@@ -3,35 +3,54 @@ using MiniDungeon.Core;
 
 namespace MiniDungeon.Commands;
 
-public class EquipCommand(EquipmentSlot slot) : ICommand
+public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
 {
     public void Execute(IGameContext context)
     {
         var session = context.Session;
+        
+        if (invSlot == -1) // Cancellation
+        {
+            session.Message = "";
+            context.PopInputChain();
+            return;
+        }
+        
         var player = session.Player;
         var inventory = session.Player.Inventory;
         var equipment = session.Player.Equipment;
+        
+        inventory.SelectedSlot = invSlot;
         var item = inventory.SelectedItem;
 
         if (item == null)
         {
-            if (equipment[slot] == null) return;
+            if (equipment[eqSlot] == null)
+            {
+                session.Message = "";
+                context.PopInputChain();
+                return;
+            }
 
             if (!inventory.HasSpace)
             {
                 session.Message = "Inventory full!";
+                context.PopInputChain();
                 return;
             }
 
-            equipment.TryUnequip(slot, out item);
+            equipment.TryUnequip(eqSlot, out item);
             inventory.TryAdd(item!);
             
             session.Message = $"You unequipped the {item!.GetName()}.";
+            context.PopInputChain();
             return;
         };
 
-        session.Message = item.OnEquip(player, slot) 
+        session.Message = item.OnEquip(player, eqSlot) 
             ? $"You equipped the {item.GetName()}." 
             : $"Cannot equip the two-handed {item.GetName()}.";
+        
+        context.PopInputChain();
     }
 }

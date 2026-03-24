@@ -1,8 +1,8 @@
 ﻿using MiniDungeon.Commands;
 using MiniDungeon.Components;
-using MiniDungeon.Input;
+using MiniDungeon.World.Generation;
 
-namespace MiniDungeon.World.Generation;
+namespace MiniDungeon.Input;
 
 public class InstructionBuilder : IDungeonBuilder
 {
@@ -61,10 +61,10 @@ public class InstructionBuilder : IDungeonBuilder
         }
         
         BindKey(ConsoleKey.E, new PickUpCommand(), "Pick up (E)");
-        BindKey(ConsoleKey.Q, new DropCommand(), "Drop (Q)");
+        BindKey(ConsoleKey.Q, new InitDropCommand(), "Drop (Q)");
         
-        BindKey(ConsoleKey.L, new EquipCommand(EquipmentSlot.LeftHand), "Equip/Unequip (L/R)");
-        BindKey(ConsoleKey.R, new EquipCommand(EquipmentSlot.RightHand));
+        BindKey(ConsoleKey.L, new InitEquipCommand(EquipmentSlot.LeftHand), "Equip/Unequip (L/R)");
+        BindKey(ConsoleKey.R, new InitEquipCommand(EquipmentSlot.RightHand));
     }
     
     private void BindKey(ConsoleKey key, ICommand command, string? instruction = null)

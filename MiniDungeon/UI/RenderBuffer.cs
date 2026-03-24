@@ -13,6 +13,7 @@ public class RenderBuffer
 
     public RenderBuffer(int width, int height)
     {
+        Instructions = string.Empty;
         Width = width;
         Height = height;
         _buffer = new DisplayInfo[width, height];
