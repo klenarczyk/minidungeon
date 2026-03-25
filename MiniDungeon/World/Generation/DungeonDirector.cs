@@ -12,4 +12,9 @@ public class DungeonDirector
             .AddItems(20)
             .AddWeapons();
     }
+
+    public void CreateEmptyCave(IDungeonBuilder builder)
+    {
+        builder.InitializeEmpty();
+    }
 }
