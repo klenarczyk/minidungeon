@@ -1,10 +1,10 @@
-﻿using MiniDungeon.Items;
+﻿using MiniDungeon.Providers;
 
-namespace MiniDungeon.Providers;
+namespace MiniDungeon.Items.Factories;
 
 public class MiscItemFactory : IMiscItemProvider
 {
-    private readonly List<Func<IItem>> _items = [];
+    private readonly List<Func<MiscItem>> _items = [];
     private readonly Random _random = new();
     
     public MiscItemFactory()

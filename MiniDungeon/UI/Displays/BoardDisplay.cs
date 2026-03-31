@@ -20,7 +20,7 @@ public class BoardDisplay : IDisplayElement
                 var displayCell = boardCell.Type switch
                 {
                     CellType.Empty => boardCell.Items.Count > 0 
-                        ? new DisplayInfo(boardCell.Items[0].GetName()[0]) 
+                        ? new DisplayInfo(boardCell.Items[0].Name[0]) 
                         : new DisplayInfo(' '),
                     CellType.Wall => new DisplayInfo('█', ConsoleColor.Magenta),
                     _ => new DisplayInfo(' ')

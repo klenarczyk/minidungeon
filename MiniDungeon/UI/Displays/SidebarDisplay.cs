@@ -12,6 +12,8 @@ public class SidebarDisplay : IDisplayElement
     private const int Width = 35; 
     private const int Height = 23;
     private const int TextX = StartX + 2;
+    private const int ItemTextMaxWidth = 29;
+    private const int EquipmentTextMaxWidth = 25;
     
     public void Draw(RenderBuffer buffer, GameSession session)
     {
@@ -46,13 +48,17 @@ public class SidebarDisplay : IDisplayElement
         var equipment = player.Equipment;
         
         var left = equipment[EquipmentSlot.LeftHand] != null 
-            ? equipment[EquipmentSlot.LeftHand]!.GetName() 
+            ? equipment[EquipmentSlot.LeftHand]!.Name.Length > EquipmentTextMaxWidth
+                ? $"{equipment[EquipmentSlot.LeftHand]!.Name[..(EquipmentTextMaxWidth - 5)]}..."
+                : equipment[EquipmentSlot.LeftHand]!.Name
             : "(Empty)";
         
         var right = equipment[EquipmentSlot.RightHand] != null 
-            ? equipment[EquipmentSlot.LeftHand] == equipment[EquipmentSlot.RightHand]
-                ? "(In use)" 
-                : equipment[EquipmentSlot.RightHand]!.GetName() 
+            ? equipment[EquipmentSlot.LeftHand] != equipment[EquipmentSlot.RightHand]
+                ? equipment[EquipmentSlot.RightHand]!.Name.Length > EquipmentTextMaxWidth
+                    ? $"{equipment[EquipmentSlot.RightHand]!.Name[..(EquipmentTextMaxWidth - 5)]}..."
+                    : equipment[EquipmentSlot.RightHand]!.Name
+                : "(In use)" 
             : "(Empty)";
         
         buffer.SetString(TextX, 6, $"Left:  {left}");
@@ -65,10 +71,13 @@ public class SidebarDisplay : IDisplayElement
         
         for (var i = 0; i < inventory.Capacity; i++)
         {
-            var prefix = inventory.SelectedSlot == i ? "> " : "";
-            var item = i < inventory.Count ? inventory.Items[i].GetName() : "-";
+            var item = i < inventory.Count 
+                ? inventory.Items[i].Name.Length > ItemTextMaxWidth 
+                    ? $"{inventory.Items[i].Name[..(ItemTextMaxWidth - 5)]}..."
+                    : inventory.Items[i].Name
+                : "-";
             
-            buffer.SetString(TextX, 9 + i, $"{prefix}{i + 1}. {item}");
+            buffer.SetString(TextX, 9 + i, $"{i + 1}. {item}");
         }
     }
     
@@ -82,8 +91,12 @@ public class SidebarDisplay : IDisplayElement
                 buffer.SetString(TextX, 19 + i, $"... ({cell.Items.Count - 3} more)");
                 break;
             }
+
+            var item = cell.Items[i].Name.Length > ItemTextMaxWidth
+                ? $"{cell.Items[i].Name[..(ItemTextMaxWidth - 5)]}..."
+                : cell.Items[i].Name;
             
-            buffer.SetString(TextX, 19 + i, $"{(char)(a+i)}) {cell.Items[i].GetName()}");
+            buffer.SetString(TextX, 19 + i, $"{(char)(a+i)}) {item}");
         }
     }
     

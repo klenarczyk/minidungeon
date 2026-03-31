@@ -19,6 +19,6 @@ public class PickUpCommand : ICommand
             return;
         } 
         
-        session.Message = $"You picked up the {item.GetName()}.";
+        session.Message = $"You picked up the {item.Name}.";
     }
 }

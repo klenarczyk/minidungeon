@@ -60,4 +60,26 @@ public class Equipment
 
         return true;
     }
+    
+    // Attributes
+    public int GetHealthBonus() => GetTotalStatBonus(item => item.GetHealthBonus());
+    public int GetStrengthBonus() => GetTotalStatBonus(item => item.GetStrengthBonus());
+    public int GetDefenseBonus() => GetTotalStatBonus(item => item.GetDefenseBonus());
+    public int GetIntelligenceBonus() => GetTotalStatBonus(item => item.GetIntelligenceBonus());
+    public int GetAggressionBonus() => GetTotalStatBonus(item => item.GetAggressionBonus());
+    public int GetLuckBonus() => GetTotalStatBonus(item => item.GetLuckBonus());
+    
+    // Helpers
+    private int GetTotalStatBonus(Func<InventoryItem, int> getStatBonus)
+    {
+        var bonus = 0;
+        
+        var itemL = _slots[EquipmentSlot.LeftHand];
+        var itemR = _slots[EquipmentSlot.RightHand];
+        
+        if (itemL != null) bonus += getStatBonus(itemL);
+        if (itemR != null && itemL != itemR) bonus += getStatBonus(itemR);
+
+        return bonus;
+    }
 }

@@ -5,6 +5,6 @@ namespace MiniDungeon.Items;
 
 public interface IItem
 {
-    string GetName();
+    string Name { get; }
     bool OnPickup(Player player, Cell cell);
 }

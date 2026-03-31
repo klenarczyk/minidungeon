@@ -6,7 +6,7 @@ namespace MiniDungeon.Items;
 
 public class WealthItem(string name, Action<Purse, int>? addToPurse = null) : IItem
 {
-    public string GetName() => name;
+    public string Name { get; } = name;
     
     public bool OnPickup(Player player, Cell cell)
     {

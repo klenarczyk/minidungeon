@@ -32,12 +32,12 @@ public class DropCommand(int invSlot) : ICommand
             if (!cell.TryAddItem(item!))
             {
                 inv.TryAdd(item!, invSlot);
-                session.Message = $"Failed to drop the {item!.GetName()}.";
+                session.Message = $"Failed to drop the {item!.Name}.";
                 context.PopInputChain();
                 return;
             }
             
-            session.Message = $"You dropped the {item!.GetName()}.";
+            session.Message = $"You dropped the {item!.Name}.";
             context.PopInputChain();
             return;
         }
