@@ -66,7 +66,7 @@ public class Equipment
     public int GetStrengthBonus() => GetTotalStatBonus(item => item.GetStrengthBonus());
     public int GetDefenseBonus() => GetTotalStatBonus(item => item.GetDefenseBonus());
     public int GetIntelligenceBonus() => GetTotalStatBonus(item => item.GetIntelligenceBonus());
-    public int GetAggressionBonus() => GetTotalStatBonus(item => item.GetAggressionBonus());
+    public int GetDexterityBonus() => GetTotalStatBonus(item => item.GetDexterityBonus());
     public int GetLuckBonus() => GetTotalStatBonus(item => item.GetLuckBonus());
     
     // Helpers

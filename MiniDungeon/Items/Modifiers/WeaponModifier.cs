@@ -1,4 +1,6 @@
-﻿namespace MiniDungeon.Items.Modifiers;
+﻿using MiniDungeon.Items.Weapons;
+
+namespace MiniDungeon.Items.Modifiers;
 
 public class WeaponModifier(
     WeaponItem weapon,
@@ -19,6 +21,6 @@ public class WeaponModifier(
     public override int GetStrengthBonus() => Math.Max(1, WrappedWeapon.GetStrengthBonus() + strengthBonus);
     public override int GetDefenseBonus() => Math.Max(1, WrappedWeapon.GetDefenseBonus() + defenseBonus);
     public override int GetIntelligenceBonus() => Math.Max(1, WrappedWeapon.GetIntelligenceBonus() + intelligenceBonus);
-    public override int GetAggressionBonus() => Math.Max(1, WrappedWeapon.GetAggressionBonus() + aggressionBonus);
+    public override int GetDexterityBonus() => Math.Max(1, WrappedWeapon.GetDexterityBonus() + aggressionBonus);
     public override int GetLuckBonus() => Math.Max(1, WrappedWeapon.GetLuckBonus() + luckBonus);
 }

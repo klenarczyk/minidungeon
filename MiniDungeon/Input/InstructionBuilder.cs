@@ -46,8 +46,8 @@ public class InstructionBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddEnemies()
     {
-        AddInstruction(ConsoleKey.D1, "Light attack (1)", false);
-        AddInstruction(ConsoleKey.D2, "Heavy attack (2)", false);
+        AddInstruction(ConsoleKey.D1, "Normal attack (1)", false);
+        AddInstruction(ConsoleKey.D2, "Stealth attack (2)", false);
         AddInstruction(ConsoleKey.D3, "Magic attack (3)", false);
         
         return this;

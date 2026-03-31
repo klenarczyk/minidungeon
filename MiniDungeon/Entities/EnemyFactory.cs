@@ -9,7 +9,9 @@ public class EnemyFactory : IEnemyProvider
 
     public EnemyFactory()
     {
-        _enemies.Add(() => new EnemyEntity("Goblin", 20, 3, 3));
+        _enemies.Add(() => new EnemyEntity("Goblin", 24, 8, 2));
+        _enemies.Add(() => new EnemyEntity("Orc", 35, 9, 1));
+        _enemies.Add(() => new EnemyEntity("Skeleton", 16, 7, 4));
     }
     
     public IEntity SpawnRandomEntity()

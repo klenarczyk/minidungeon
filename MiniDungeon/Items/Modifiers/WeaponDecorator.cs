@@ -1,4 +1,8 @@
-﻿namespace MiniDungeon.Items.Modifiers;
+﻿using MiniDungeon.Combat;
+using MiniDungeon.Entities;
+using MiniDungeon.Items.Weapons;
+
+namespace MiniDungeon.Items.Modifiers;
 
 public abstract class WeaponDecorator(WeaponItem weapon)
     : WeaponItem(weapon.Name, weapon.Damage, weapon.IsTwoHanded)
@@ -11,6 +15,9 @@ public abstract class WeaponDecorator(WeaponItem weapon)
     public override int GetStrengthBonus() => WrappedWeapon.GetStrengthBonus();
     public override int GetDefenseBonus() => WrappedWeapon.GetDefenseBonus();
     public override int GetIntelligenceBonus() => WrappedWeapon.GetIntelligenceBonus();
-    public override int GetAggressionBonus() => WrappedWeapon.GetAggressionBonus();
+    public override int GetDexterityBonus() => WrappedWeapon.GetDexterityBonus();
     public override int GetLuckBonus() => WrappedWeapon.GetLuckBonus();
+
+    public override CombatStats Accept(IAttackVisitor visitor, Player player) 
+        => WrappedWeapon.Accept(visitor, player);
 }

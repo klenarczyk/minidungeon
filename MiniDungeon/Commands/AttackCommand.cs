@@ -1,17 +1,21 @@
-﻿using MiniDungeon.Core;
+﻿using MiniDungeon.Combat;
+using MiniDungeon.Components;
+using MiniDungeon.Core;
 using MiniDungeon.Entities;
+using MiniDungeon.Items;
 using MiniDungeon.World;
 
 namespace MiniDungeon.Commands;
 
-public class AttackCommand(Cell cell, int attackType) : ICommand
+public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
 {
     public void Execute(IGameContext context)
     {
         var session = context.Session;
         var player = session.Player;
         var enemy = cell.Entity;
-
+        var stats = GetCombatStats(player);
+        
         if (enemy == null)
         {
             session.Message = string.Empty;
@@ -19,7 +23,7 @@ public class AttackCommand(Cell cell, int attackType) : ICommand
             return;
         }
         
-        PlayerAttack(player, enemy);
+        enemy.TakeDamage(stats.Damage);
         if (enemy.IsDead)
         {
             session.Message = $"{enemy.Name} is defeated!";
@@ -28,7 +32,7 @@ public class AttackCommand(Cell cell, int attackType) : ICommand
             return;
         }
         
-        EnemyAttack(enemy, player);
+        EnemyAttack(enemy, player, stats.Defense);
         if (player.IsDead)
         {
             session.Message = "You Died | Game Over!";
@@ -40,13 +44,23 @@ public class AttackCommand(Cell cell, int attackType) : ICommand
         session.Message = $"You: {player.Health}HP | Enemy: {enemy.Health}HP";
     }
 
-    private void PlayerAttack(Player player, IEntity entity)
+    private void EnemyAttack(IEntity enemy, Player player, int defense)
     {
-        entity.TakeDamage(player.Strength);
+        var dmg = Math.Max(0, enemy.DealDamage() - defense);
+        player.Health -= dmg;
     }
 
-    private void EnemyAttack(IEntity entity, Player player)
+    private CombatStats GetCombatStats(Player player)
     {
-        player.Health -= entity.DealDamage();
+        var item = player.Equipment[EquipmentSlot.LeftHand] 
+                    ?? player.Equipment[EquipmentSlot.RightHand] 
+                    ?? new InventoryItem("fist");
+
+        var stats = item.Accept(attackVisitor, player);
+        
+        return new CombatStats(
+            Math.Max(0, stats.Damage),
+            Math.Max(0, stats.Defense)
+        );
     }
 }

@@ -18,7 +18,7 @@ public class Player
     public int Strength => Attributes.Strength + Equipment.GetStrengthBonus(); 
     public int Defense => Attributes.Defense + Equipment.GetDefenseBonus(); 
     public int Intelligence => Attributes.Intelligence + Equipment.GetIntelligenceBonus(); 
-    public int Aggression => Attributes.Aggression + Equipment.GetAggressionBonus(); 
+    public int Dexterity => Attributes.Dexterity + Equipment.GetDexterityBonus(); 
     public int Luck => Attributes.Luck + Equipment.GetLuckBonus();
 
     public Player(Position startingPosition)

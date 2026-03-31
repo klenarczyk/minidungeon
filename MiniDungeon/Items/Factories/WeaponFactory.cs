@@ -1,4 +1,5 @@
 ﻿using MiniDungeon.Items.Modifiers;
+using MiniDungeon.Items.Weapons;
 using MiniDungeon.Providers;
 
 namespace MiniDungeon.Items.Factories;
@@ -37,15 +38,15 @@ public class WeaponFactory : IWeaponProvider
 
     private void LoadWeapons()
     {
-        _weapons.Add(() => new WeaponItem("sword", 3));
-        _weapons.Add(() => new WeaponItem("axe", 5));
-        _weapons.Add(() => new WeaponItem("hammer", 7, true));
+        _weapons.Add(() => new MagicWeapon("wand", 6));
+        _weapons.Add(() => new LightWeapon("sword", 5));
+        _weapons.Add(() => new HeavyWeapon("hammer", 9, true));
     }
 
     private void LoadModifiers()
     {
-        _modifiers.Add(w => new WeaponModifier(w, "sharp", damageBonus: 5));
-        _modifiers.Add(w => new WeaponModifier(w, "defensive", defenseBonus: 5));
+        _modifiers.Add(w => new WeaponModifier(w, "sharp", damageBonus: 3));
+        _modifiers.Add(w => new WeaponModifier(w, "defensive", defenseBonus: 2));
         _modifiers.Add(w => new WeaponModifier(w, "unlucky", luckBonus: -2));
     }
 }

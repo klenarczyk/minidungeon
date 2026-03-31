@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Components;
+﻿using MiniDungeon.Combat;
+using MiniDungeon.Components;
 using MiniDungeon.Entities;
 using MiniDungeon.World;
 
@@ -26,6 +27,8 @@ public class InventoryItem(string name) : IItem
     public virtual int GetStrengthBonus() => 0;
     public virtual int GetDefenseBonus() => 0;
     public virtual int GetIntelligenceBonus() => 0;
-    public virtual int GetAggressionBonus() => 0;
+    public virtual int GetDexterityBonus() => 0;
     public virtual int GetLuckBonus() => 0;
+    
+    public virtual CombatStats Accept(IAttackVisitor visitor, Player player) => visitor.Visit(this, player);
 }

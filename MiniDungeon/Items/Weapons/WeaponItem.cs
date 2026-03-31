@@ -1,9 +1,9 @@
 ﻿using MiniDungeon.Components;
 using MiniDungeon.Entities;
 
-namespace MiniDungeon.Items;
+namespace MiniDungeon.Items.Weapons;
 
-public class WeaponItem(string name, int damage, bool isTwoHanded = false) : InventoryItem(name)
+public abstract class WeaponItem(string name, int damage, bool isTwoHanded = false) : InventoryItem(name)
 {
     public virtual int Damage { get; } = damage;
     public bool IsTwoHanded { get; } = isTwoHanded;

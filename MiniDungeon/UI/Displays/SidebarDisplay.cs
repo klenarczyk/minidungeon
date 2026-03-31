@@ -37,7 +37,7 @@ public class SidebarDisplay : IDisplayElement
         buffer.SetString(TextX, 1, 
             $"HP:  {attribs.Health,-3} STR: {attribs.Strength,-3} DEF: {attribs.Defense,-3}");
         buffer.SetString(TextX, 2, 
-            $"INT: {attribs.Intelligence,-3} AGG: {attribs.Aggression,-3} LCK: {attribs.Luck,
+            $"INT: {attribs.Intelligence,-3} DEX: {attribs.Dexterity,-3} LCK: {attribs.Luck,
             -3}");
         buffer.SetString(TextX, 4, 
             $"Gold: {purse.Gold,-3} Coins: {purse.Coins,-3}");
