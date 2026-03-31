@@ -1,24 +1,24 @@
-﻿using MiniDungeon.Components;
-using MiniDungeon.Core;
+﻿using MiniDungeon.Core;
 using MiniDungeon.Input;
+using MiniDungeon.World;
 
 namespace MiniDungeon.Commands;
 
-public class InitEquipCommand(EquipmentSlot slot) : ICommand
+public class InitAttackCommand(Cell cell) : ICommand
 {
     public void Execute(IGameContext context)
     {
         var session = context.Session;
 
-        session.Message = "Select item (1-9), Cancel (Bck)";
+        session.Message = "Attack (1-3), Equip (L/R), Cancel (Bck)";
 
-        IHandler inputChain = new SingleInputHandler(ConsoleKey.D1, new EquipCommand(slot, 0));
+        IHandler inputChain = new SingleInputHandler(ConsoleKey.D1, new AttackCommand(cell, 0));
         var inputChainTail = inputChain;
 
-        for (var i = 1; i < 9; i++)
+        for (var i = 1; i < 3; i++)
         {
             inputChainTail = inputChainTail.SetNext(
-                new SingleInputHandler(ConsoleKey.D1 + i, new EquipCommand(slot, i)));
+                new SingleInputHandler(ConsoleKey.D1 + i, new AttackCommand(cell, i)));
         }
         
         inputChainTail.SetNext(

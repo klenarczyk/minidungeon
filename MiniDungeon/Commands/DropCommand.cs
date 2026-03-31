@@ -8,13 +8,6 @@ public class DropCommand(int invSlot) : ICommand
     {
         var session = context.Session;
         
-        if (invSlot == -1) // Cancellation
-        {
-            session.Message = "";
-            context.PopInputChain();
-            return;
-        }
-        
         var player = session.Player;
         var inv = player.Inventory;
         var cell = session.Board[player.Position];

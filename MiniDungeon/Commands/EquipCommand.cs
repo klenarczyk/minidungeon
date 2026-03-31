@@ -9,13 +9,6 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
     {
         var session = context.Session;
         
-        if (invSlot == -1) // Cancellation
-        {
-            session.Message = "";
-            context.PopInputChain();
-            return;
-        }
-        
         var player = session.Player;
         var inventory = session.Player.Inventory;
         var equipment = session.Player.Equipment;

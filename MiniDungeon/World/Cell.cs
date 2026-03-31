@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Items;
+﻿using MiniDungeon.Entities;
+using MiniDungeon.Items;
 
 namespace MiniDungeon.World;
 
@@ -14,6 +15,7 @@ public class Cell
     
     private readonly List<IItem> _items = [];
     public IReadOnlyList<IItem> Items => _items;
+    public IEntity? Entity { get; set; }
     
     public bool TryAddItem(IItem item)
     {

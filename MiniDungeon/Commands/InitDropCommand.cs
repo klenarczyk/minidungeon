@@ -22,7 +22,7 @@ public class InitDropCommand : ICommand
         }
         
         inputChainTail.SetNext(
-            new SingleInputHandler(ConsoleKey.Backspace, new DropCommand(-1)));
+            new SingleInputHandler(ConsoleKey.Backspace, new ReturnCommand()));
         
         context.PushInputChain(inputChain);
     }

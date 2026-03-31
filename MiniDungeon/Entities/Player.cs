@@ -11,7 +11,9 @@ public class Player
     public Equipment Equipment { get; } = new();
     public Purse Purse { get; } = new();
 
-    public int Health { get; private set; }
+    public int Health { get; set; }
+    public bool IsDead => Health <= 0;
+    
     public int MaxHealth => Attributes.Health + Equipment.GetHealthBonus();
     public int Strength => Attributes.Strength + Equipment.GetStrengthBonus(); 
     public int Defense => Attributes.Defense + Equipment.GetDefenseBonus(); 

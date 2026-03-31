@@ -41,12 +41,18 @@ public class InstructionBuilder : IDungeonBuilder
     public IDungeonBuilder AddWeapons()
     {
         BindItemCommands();
-        
-        // Attack actions will be added later I assume
-        
         return this;
     }
 
+    public IDungeonBuilder AddEnemies()
+    {
+        AddInstruction(ConsoleKey.D1, "Light attack (1)", false);
+        AddInstruction(ConsoleKey.D2, "Heavy attack (2)", false);
+        AddInstruction(ConsoleKey.D3, "Magic attack (3)", false);
+        
+        return this;
+    }
+    
     public IHandler? GetInputChain() => _inputChainHead;
 
     public string GetInstructions() => string.Join(", ",  _instructions);
@@ -67,9 +73,9 @@ public class InstructionBuilder : IDungeonBuilder
         BindKey(ConsoleKey.R, new InitEquipCommand(EquipmentSlot.RightHand));
     }
     
-    private void BindKey(ConsoleKey key, ICommand command, string? instruction = null)
+    private void BindKey(ConsoleKey key, ICommand command, string? instruction = null, bool unique = true)
     {
-        if (!_keyBinds.Add(key)) return; // Already bound
+        if (unique && !_keyBinds.Add(key)) return; // Already bound
 
         var handler = new SingleInputHandler(key, command);
 
@@ -84,6 +90,12 @@ public class InstructionBuilder : IDungeonBuilder
         }
 
         if (instruction == null || instruction.IsWhiteSpace()) return;
+        _instructions.Add(instruction);
+    }
+
+    private void AddInstruction(ConsoleKey key, string instruction, bool unique = true)
+    {
+        if ((unique && !_keyBinds.Add(key)) || instruction.IsWhiteSpace()) return;
         _instructions.Add(instruction);
     }
 

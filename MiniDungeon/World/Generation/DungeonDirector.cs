@@ -10,7 +10,8 @@ public class DungeonDirector
             .AddRooms()
             .AddCorridors()
             .AddItems(20)
-            .AddWeapons();
+            .AddWeapons()
+            .AddEnemies();
     }
 
     public void CreateEmptyCave(IDungeonBuilder builder)

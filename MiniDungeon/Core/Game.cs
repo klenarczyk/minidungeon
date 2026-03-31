@@ -35,17 +35,18 @@ public class Game : IGameContext
     public void Run()
     {
         _renderer.Init();
-
+        _renderer.Render(Session);
+        
         while (Session.IsRunning)
         {
-            _renderer.Render(Session);
-
             if (_inputChains.Count == 0) Session.IsRunning = false;
             var currentChain = _inputChains.Peek();
 
             var key = Console.ReadKey(true).Key;
             var command = currentChain.Handle(key);
             command.Execute(this);
+            
+            _renderer.Render(Session);
         }
     }
 }

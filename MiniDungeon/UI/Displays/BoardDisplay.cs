@@ -19,9 +19,11 @@ public class BoardDisplay : IDisplayElement
                 var boardCell = board[x, y];
                 var displayCell = boardCell.Type switch
                 {
-                    CellType.Empty => boardCell.Items.Count > 0 
-                        ? new DisplayInfo(boardCell.Items[0].Name[0]) 
-                        : new DisplayInfo(' '),
+                    CellType.Empty => boardCell.Entity != null 
+                        ? new DisplayInfo(boardCell.Entity.Name[0], ConsoleColor.Red)
+                        : boardCell.Items.Count > 0 
+                            ? new DisplayInfo(boardCell.Items[0].Name[0]) 
+                            : new DisplayInfo(' '),
                     CellType.Wall => new DisplayInfo('█', ConsoleColor.Magenta),
                     _ => new DisplayInfo(' ')
                 };

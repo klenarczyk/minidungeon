@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Items;
+﻿using MiniDungeon.Entities;
+using MiniDungeon.Items;
 using MiniDungeon.Items.Factories;
 
 namespace MiniDungeon.World.Generation;
@@ -131,9 +132,8 @@ public class DungeonBuilder : IDungeonBuilder
         {
             var cell = freeCells[random.Next(freeCells.Count)];
             var type = random.Next(10);
-            IItem item;
-            
-            item = (type < 3) 
+
+            var item = (type < 3) 
                 ? wealth.GetRandomWealth() 
                 : misc.GetRandomItem();
 
@@ -159,6 +159,30 @@ public class DungeonBuilder : IDungeonBuilder
             cell.TryAddItem(item);
         }
 
+        return this;
+    }
+
+    public IDungeonBuilder AddEnemies()
+    {
+        var enemies = new EnemyFactory();
+
+        var freeCells = _board.GetFreeCells();
+        if (freeCells.Count <= 1) return this;
+
+        var random = new Random();
+        var attempts = 0;
+        for (var i = 0; i < random.Next(3, 7) && attempts < 20; i++)
+        {
+            var cell = freeCells[random.Next(freeCells.Count)];
+            if (cell.Type != CellType.Wall &&
+                cell.Entity == null &&
+                cell != _board[_board.StartingPosition])
+            {
+                cell.Entity = enemies.SpawnRandomEntity();
+            }
+            else attempts++;
+        }
+        
         return this;
     }
 
