@@ -14,12 +14,12 @@ public class Player
     public int Health { get; set; }
     public bool IsDead => Health <= 0;
     
-    public int MaxHealth => Attributes.Health + Equipment.GetHealthBonus();
-    public int Strength => Attributes.Strength + Equipment.GetStrengthBonus(); 
-    public int Defense => Attributes.Defense + Equipment.GetDefenseBonus(); 
-    public int Intelligence => Attributes.Intelligence + Equipment.GetIntelligenceBonus(); 
-    public int Dexterity => Attributes.Dexterity + Equipment.GetDexterityBonus(); 
-    public int Luck => Attributes.Luck + Equipment.GetLuckBonus();
+    public int MaxHealth => Math.Max(1, Attributes.Health + Equipment.GetHealthBonus());
+    public int Strength => Math.Max(0, Attributes.Strength + Equipment.GetStrengthBonus()); 
+    public int Defense => Math.Max(0, Attributes.Defense + Equipment.GetDefenseBonus()); 
+    public int Intelligence => Math.Max(0, Attributes.Intelligence + Equipment.GetIntelligenceBonus()); 
+    public int Dexterity => Math.Max(0, Attributes.Dexterity + Equipment.GetDexterityBonus());
+    public int Luck => Math.Max(0, Attributes.Luck + Equipment.GetLuckBonus());
 
     public Player(Position startingPosition)
     {

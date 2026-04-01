@@ -16,11 +16,11 @@ public class WeaponModifier(
 {
     public override string Name => $"{WrappedWeapon.Name} ({suffix})";
     
-    public override int Damage => Math.Max(1, WrappedWeapon.Damage + damageBonus);
-    public override int GetHealthBonus() => Math.Max(1, WrappedWeapon.GetHealthBonus() + healthBonus);
-    public override int GetStrengthBonus() => Math.Max(1, WrappedWeapon.GetStrengthBonus() + strengthBonus);
-    public override int GetDefenseBonus() => Math.Max(1, WrappedWeapon.GetDefenseBonus() + defenseBonus);
-    public override int GetIntelligenceBonus() => Math.Max(1, WrappedWeapon.GetIntelligenceBonus() + intelligenceBonus);
-    public override int GetDexterityBonus() => Math.Max(1, WrappedWeapon.GetDexterityBonus() + aggressionBonus);
-    public override int GetLuckBonus() => Math.Max(1, WrappedWeapon.GetLuckBonus() + luckBonus);
+    public override int Damage => WrappedWeapon.Damage + damageBonus;
+    public override int GetHealthBonus() => WrappedWeapon.GetHealthBonus() + healthBonus;
+    public override int GetStrengthBonus() => WrappedWeapon.GetStrengthBonus() + strengthBonus;
+    public override int GetDefenseBonus() => WrappedWeapon.GetDefenseBonus() + defenseBonus;
+    public override int GetIntelligenceBonus() => WrappedWeapon.GetIntelligenceBonus() + intelligenceBonus;
+    public override int GetDexterityBonus() => WrappedWeapon.GetDexterityBonus() + aggressionBonus;
+    public override int GetLuckBonus() => WrappedWeapon.GetLuckBonus() + luckBonus;
 }
