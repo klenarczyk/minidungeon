@@ -14,10 +14,14 @@ public class InitAttackCommand(Cell cell) : ICommand
 
         session.Message = "Attack (1-3), Equip (L/R), Cancel (Bck)";
 
-        IHandler inputChain = new SingleInputHandler(ConsoleKey.D1, 
-            new AttackCommand(cell, new NormalAttackVisitor()));
+        
+        IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
 
+        inputChainTail = inputChainTail.SetNext(
+            new SingleInputHandler(ConsoleKey.D1, 
+                new AttackCommand(cell, new NormalAttackVisitor())));
+        
         inputChainTail = inputChainTail.SetNext(
             new SingleInputHandler(ConsoleKey.D2, 
                 new AttackCommand(cell, new StealthAttackVisitor())));

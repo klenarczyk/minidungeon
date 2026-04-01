@@ -12,10 +12,10 @@ public class InitDropCommand : ICommand
 
         session.Message = "Select item (1-9), Cancel (Bck)";
 
-        IHandler inputChain = new SingleInputHandler(ConsoleKey.D1, new DropCommand(0));
+        IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
 
-        for (var i = 1; i < 9; i++)
+        for (var i = 0; i < 9; i++)
         {
             inputChainTail = inputChainTail.SetNext(
                 new SingleInputHandler(ConsoleKey.D1 + i, new DropCommand(i)));
