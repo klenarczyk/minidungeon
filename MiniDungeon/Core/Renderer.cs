@@ -13,6 +13,7 @@ public class Renderer
         _buffer = new RenderBuffer(width, height);
         
         _components.Add(new BoardDisplay());
+        _components.Add(new StatDisplay());
         _components.Add(new SidebarDisplay());
         _components.Add(new MessageDisplay());
     }

@@ -1,5 +1,7 @@
 ﻿using MiniDungeon.Entities;
 using MiniDungeon.Items;
+using MiniDungeon.UI;
+using ConsoleColor = MiniDungeon.UI.ConsoleColor;
 
 namespace MiniDungeon.World;
 
@@ -16,7 +18,24 @@ public class Cell
     private readonly List<IItem> _items = [];
     public IReadOnlyList<IItem> Items => _items;
     public IEntity? Entity { get; set; }
-    
+
+    public DisplayInfo DisplayInfo
+    {
+        get
+        {
+            if (Type == CellType.Wall) 
+                return new DisplayInfo('█', ConsoleColor.Magenta);
+
+            if (Entity != null)
+                return new DisplayInfo(Entity.Name[0], ConsoleColor.Red);
+
+            if (Items.Count > 0)
+                return new DisplayInfo(Items[0].Name[0]);
+            
+            return new DisplayInfo(' ');
+        }
+    }
+
     public bool TryAddItem(IItem item)
     {
         if (Type == CellType.Wall) return false;

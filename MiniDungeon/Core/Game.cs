@@ -6,7 +6,7 @@ namespace MiniDungeon.Core;
 public class Game : IGameContext
 {
     public GameSession Session { get; }
-    private readonly Renderer _renderer = new(80, 24);
+    private readonly Renderer _renderer = new(120, 24);
     
     private readonly Stack<IHandler> _inputChains = new();
     
@@ -39,7 +39,7 @@ public class Game : IGameContext
         
         while (Session.IsRunning)
         {
-            if (_inputChains.Count == 0) Session.IsRunning = false;
+            if (_inputChains.Count == 0) break;
             var currentChain = _inputChains.Peek();
 
             var key = Console.ReadKey(true).Key;
