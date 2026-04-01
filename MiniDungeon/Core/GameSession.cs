@@ -9,4 +9,5 @@ public class GameSession(Board board)
     public readonly Board Board = board;
     public readonly Player Player = new(board.StartingPosition);
     public string Message { get; set; } = string.Empty;
+    public string InputMode { get; set; } = string.Empty;
 }

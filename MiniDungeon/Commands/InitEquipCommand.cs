@@ -10,8 +10,6 @@ public class InitEquipCommand(EquipmentSlot slot) : ICommand
     {
         var session = context.Session;
 
-        session.Message = "Select item (1-9), Cancel (Bck)";
-
         IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
 
@@ -24,6 +22,8 @@ public class InitEquipCommand(EquipmentSlot slot) : ICommand
         inputChainTail.SetNext(
             new SingleInputHandler(ConsoleKey.Backspace, new ReturnCommand()));
         
-        context.PushInputChain(inputChain);
+        context.PushInputChain(inputChain, "Equip");
+        
+        session.Message = "Select item (1-9), Cancel (Bck)";
     }
 }

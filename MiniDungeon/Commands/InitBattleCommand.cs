@@ -6,14 +6,11 @@ using MiniDungeon.World;
 
 namespace MiniDungeon.Commands;
 
-public class InitAttackCommand(Cell cell) : ICommand
+public class InitBattleCommand(Cell cell) : ICommand
 {
     public void Execute(IGameContext context)
     {
         var session = context.Session;
-
-        session.Message = "Attack (1-3), Equip (L/R), Cancel (Bck)";
-
         
         IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
@@ -39,6 +36,8 @@ public class InitAttackCommand(Cell cell) : ICommand
         inputChainTail.SetNext(
             new SingleInputHandler(ConsoleKey.Backspace, new ReturnCommand()));
         
-        context.PushInputChain(inputChain);
+        context.PushInputChain(inputChain, "Battle");
+        
+        session.Message = "Attack (1-3), Equip (L/R), Cancel (Bck)";
     }
 }

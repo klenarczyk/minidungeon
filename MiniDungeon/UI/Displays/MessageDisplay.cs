@@ -10,8 +10,11 @@ public class MessageDisplay : IDisplayElement
 
     public void Draw(RenderBuffer buffer, GameSession session)
     {
-        var message = $">> {session.Message}".PadRight(Board.Columns + 40);
-
+        var prefix = session.InputMode == string.Empty
+            ? string.Empty
+            : $"({session.InputMode}) ";
+        
+        var message = $"{prefix}>> {session.Message}".PadRight(Board.Columns + 40);
         buffer.SetString(StartX, StartY, message);
     }
 }
