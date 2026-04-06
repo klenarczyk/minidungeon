@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Components;
 using MiniDungeon.Entities;
+using MiniDungeon.Items.Abstractions;
 using MiniDungeon.World;
 
 namespace MiniDungeon.Items;

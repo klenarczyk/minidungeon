@@ -1,9 +1,11 @@
 ﻿using MiniDungeon.Components;
 using MiniDungeon.Entities;
+using MiniDungeon.Items.Abstractions;
 
 namespace MiniDungeon.Items.Weapons;
 
-public abstract class WeaponItem(string name, int damage, bool isTwoHanded = false) : InventoryItem(name)
+public abstract class WeaponItem(string name, int damage, bool isTwoHanded = false) 
+    : InventoryItem(name), IWeaponItem
 {
     public virtual int Damage { get; } = damage;
     public bool IsTwoHanded { get; } = isTwoHanded;
@@ -25,7 +27,7 @@ public abstract class WeaponItem(string name, int damage, bool isTwoHanded = fal
             && equipment[slot] != equipment[otherHand]
             && inventory.Count == inventory.Capacity) return false;
         
-        InventoryItem? heldItem = null;
+        IInventoryItem? heldItem = null;
         if (equipment[slot] != null)
         {
             equipment.TryUnequip(slot, out heldItem);
@@ -35,7 +37,7 @@ public abstract class WeaponItem(string name, int damage, bool isTwoHanded = fal
         
         if (IsTwoHanded)
         {
-            InventoryItem? otherHeldItem = null;
+            IInventoryItem? otherHeldItem = null;
             if (equipment[otherHand] != null)
             {
                 equipment.TryUnequip(otherHand, out otherHeldItem);

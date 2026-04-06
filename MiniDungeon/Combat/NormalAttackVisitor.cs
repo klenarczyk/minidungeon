@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Entities;
 using MiniDungeon.Items;
+using MiniDungeon.Items.Abstractions;
 using MiniDungeon.Items.Weapons;
 
 namespace MiniDungeon.Combat;
@@ -21,7 +22,7 @@ public class NormalAttackVisitor : IAttackVisitor
         return new CombatStats(1, player.Dexterity + player.Luck);
     }
 
-    public CombatStats Visit(InventoryItem item, Player player)
+    public CombatStats Visit(IInventoryItem item, Player player)
     {
         return new CombatStats(0, player.Dexterity);
     }

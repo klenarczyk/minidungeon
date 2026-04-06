@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Entities;
 using MiniDungeon.Items;
+using MiniDungeon.Items.Abstractions;
 using MiniDungeon.UI;
 using ConsoleColor = MiniDungeon.UI.ConsoleColor;
 

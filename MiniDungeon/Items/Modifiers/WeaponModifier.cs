@@ -1,9 +1,9 @@
-﻿using MiniDungeon.Items.Weapons;
+﻿using MiniDungeon.Items.Abstractions;
 
 namespace MiniDungeon.Items.Modifiers;
 
 public class WeaponModifier(
-    WeaponItem weapon,
+    IWeaponItem weapon,
     string suffix,
     int damageBonus = 0,
     int healthBonus = 0,

@@ -1,7 +1,7 @@
 ﻿using MiniDungeon.Entities;
 using MiniDungeon.World;
 
-namespace MiniDungeon.Items;
+namespace MiniDungeon.Items.Abstractions;
 
 public interface IItem
 {

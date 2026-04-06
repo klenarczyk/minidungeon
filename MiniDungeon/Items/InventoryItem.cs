@@ -1,11 +1,12 @@
 ﻿using MiniDungeon.Combat;
 using MiniDungeon.Components;
 using MiniDungeon.Entities;
+using MiniDungeon.Items.Abstractions;
 using MiniDungeon.World;
 
 namespace MiniDungeon.Items;
 
-public class InventoryItem(string name) : IItem
+public class InventoryItem(string name) : IInventoryItem
 {
     public virtual string Name { get; } = name;
     

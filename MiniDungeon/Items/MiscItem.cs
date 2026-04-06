@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Components;
 using MiniDungeon.Entities;
+using MiniDungeon.Items.Abstractions;
 
 namespace MiniDungeon.Items;
 
@@ -12,7 +13,7 @@ public class MiscItem(string name) : InventoryItem(name)
         var item = inventory.SelectedItem;
         if (item == null) return false;
 
-        InventoryItem? heldItem = null;
+        IInventoryItem? heldItem = null;
         if (equipment[slot] != null)
         {
             equipment.TryUnequip(slot, out heldItem);

@@ -1,10 +1,11 @@
-﻿using MiniDungeon.Providers;
+﻿using MiniDungeon.Items.Abstractions;
+using MiniDungeon.Providers;
 
 namespace MiniDungeon.Items.Factories;
 
 public class WealthFactory : IWealthProvider
 {
-    private readonly List<Func<WealthItem>> _wealth = [];
+    private readonly List<Func<IItem>> _wealth = [];
     private readonly Random _random = new();
     
     public WealthFactory()

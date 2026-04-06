@@ -1,4 +1,5 @@
 ﻿using MiniDungeon.Items;
+using MiniDungeon.Items.Abstractions;
 
 namespace MiniDungeon.Components;
 
@@ -10,7 +11,7 @@ public enum EquipmentSlot
 
 public class Equipment
 {
-    private readonly Dictionary<EquipmentSlot, InventoryItem?> _slots = new();
+    private readonly Dictionary<EquipmentSlot, IInventoryItem?> _slots = new();
 
     public Equipment()
     {
@@ -20,9 +21,9 @@ public class Equipment
         }
     }
 
-    public InventoryItem? this[EquipmentSlot slot] => _slots[slot];
+    public IInventoryItem? this[EquipmentSlot slot] => _slots[slot];
     
-    public bool TryEquip(InventoryItem item, EquipmentSlot slot, bool isTwoHanded = false)
+    public bool TryEquip(IInventoryItem item, EquipmentSlot slot, bool isTwoHanded = false)
     {
         if (_slots[slot] != null) return false;
 
@@ -41,7 +42,7 @@ public class Equipment
         return true;
     }
     
-    public bool TryUnequip(EquipmentSlot slot, out InventoryItem? item)
+    public bool TryUnequip(EquipmentSlot slot, out IInventoryItem? item)
     {
         item = null;
         if (_slots[slot] == null) return false;
@@ -70,7 +71,7 @@ public class Equipment
     public int GetLuckBonus() => GetTotalStatBonus(item => item.GetLuckBonus());
     
     // Helpers
-    private int GetTotalStatBonus(Func<InventoryItem, int> getStatBonus)
+    private int GetTotalStatBonus(Func<IInventoryItem, int> getStatBonus)
     {
         var bonus = 0;
         

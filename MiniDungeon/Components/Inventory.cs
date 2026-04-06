@@ -1,11 +1,12 @@
 ﻿using MiniDungeon.Items;
+using MiniDungeon.Items.Abstractions;
 
 namespace MiniDungeon.Components;
 
 public class Inventory(int capacity = 9)
 {
-    private readonly List<InventoryItem> _items = [];
-    public IReadOnlyList<InventoryItem> Items => _items;
+    private readonly List<IInventoryItem> _items = [];
+    public IReadOnlyList<IInventoryItem> Items => _items;
  
     public int SelectedSlot { get; set; } = -1;
     
@@ -13,9 +14,9 @@ public class Inventory(int capacity = 9)
     public int Count => _items.Count;
     public bool HasSpace => Count < Capacity;
     
-    public InventoryItem? SelectedItem => SelectedSlot >= 0 && SelectedSlot < Count ? _items[SelectedSlot] : null;
+    public IInventoryItem? SelectedItem => SelectedSlot >= 0 && SelectedSlot < Count ? _items[SelectedSlot] : null;
     
-    public bool TryAdd(InventoryItem item)
+    public bool TryAdd(IInventoryItem item)
     {
         if (!HasSpace) return false;
         
@@ -23,7 +24,7 @@ public class Inventory(int capacity = 9)
         return true;
     }
     
-    public bool TryAdd(InventoryItem item, int slot)
+    public bool TryAdd(IInventoryItem item, int slot)
     {
         if (!HasSpace) return false;
         if (slot < 0 || slot >= Capacity) return false;
@@ -36,7 +37,7 @@ public class Inventory(int capacity = 9)
         return true;
     }
 
-    public bool TryRemove(InventoryItem item)
+    public bool TryRemove(IInventoryItem item)
     {
         if (!_items.Remove(item)) return false;
         
@@ -44,7 +45,7 @@ public class Inventory(int capacity = 9)
         return true;
     }
     
-    public bool TryRemove(int slot, out InventoryItem? item)
+    public bool TryRemove(int slot, out IInventoryItem? item)
     {
         item = null;
         

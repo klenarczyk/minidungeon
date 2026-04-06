@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Items.Modifiers;
+﻿using MiniDungeon.Items.Abstractions;
+using MiniDungeon.Items.Modifiers;
 using MiniDungeon.Items.Weapons;
 using MiniDungeon.Providers;
 
@@ -6,8 +7,8 @@ namespace MiniDungeon.Items.Factories;
 
 public class WeaponFactory : IWeaponProvider
 {
-    private readonly List<Func<WeaponItem>> _weapons = [];
-    private readonly List<Func<WeaponItem, WeaponItem>> _modifiers = [];
+    private readonly List<Func<IWeaponItem>> _weapons = [];
+    private readonly List<Func<IWeaponItem, IWeaponItem>> _modifiers = [];
     private readonly Random _random = new();
 
     public WeaponFactory()
