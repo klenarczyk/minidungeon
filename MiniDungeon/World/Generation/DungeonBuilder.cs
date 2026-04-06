@@ -1,5 +1,5 @@
-﻿using MiniDungeon.Entities;
-using MiniDungeon.Items.Factories;
+﻿using MiniDungeon.Actors.Spawning;
+using MiniDungeon.Loot.Spawning;
 
 namespace MiniDungeon.World.Generation;
 

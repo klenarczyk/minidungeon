@@ -1,7 +1,7 @@
-﻿using MiniDungeon.Entities;
-using MiniDungeon.Items.Abstractions;
-using MiniDungeon.UI;
-using ConsoleColor = MiniDungeon.UI.ConsoleColor;
+﻿using MiniDungeon.Actors;
+using MiniDungeon.Engine.UI;
+using MiniDungeon.Loot.Items;
+using ConsoleColor = MiniDungeon.Engine.UI.ConsoleColor;
 
 namespace MiniDungeon.World;
 
