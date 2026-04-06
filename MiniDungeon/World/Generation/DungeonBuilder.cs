@@ -1,5 +1,4 @@
 ﻿using MiniDungeon.Entities;
-using MiniDungeon.Items;
 using MiniDungeon.Items.Factories;
 
 namespace MiniDungeon.World.Generation;

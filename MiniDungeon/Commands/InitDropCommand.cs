@@ -1,5 +1,4 @@
-﻿using MiniDungeon.Components;
-using MiniDungeon.Core;
+﻿using MiniDungeon.Core;
 using MiniDungeon.Input;
 
 namespace MiniDungeon.Commands;

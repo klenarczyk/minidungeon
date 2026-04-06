@@ -1,5 +1,4 @@
-﻿using MiniDungeon.Components;
-using MiniDungeon.Core;
+﻿using MiniDungeon.Core;
 
 namespace MiniDungeon.UI.Displays;
 

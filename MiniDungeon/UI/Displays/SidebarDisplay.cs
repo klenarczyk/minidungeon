@@ -1,7 +1,5 @@
 ﻿using MiniDungeon.Components;
 using MiniDungeon.Core;
-using MiniDungeon.Entities;
-using MiniDungeon.World;
 
 namespace MiniDungeon.UI.Displays;
 

@@ -2,16 +2,15 @@
 using MiniDungeon.Components;
 using MiniDungeon.Entities;
 using MiniDungeon.Items.Abstractions;
-using MiniDungeon.Items.Weapons;
 using MiniDungeon.World;
 
 namespace MiniDungeon.Items.Modifiers;
 
-public abstract class WeaponDecorator(IWeaponItem weapon) : IWeaponItem
+public abstract class WeaponDecorator(IWeaponItem weapon, string suffix) : IWeaponItem
 {
     protected readonly IWeaponItem WrappedWeapon = weapon;
-    
-    public virtual string Name => WrappedWeapon.Name;
+
+    public string Name => $"{WrappedWeapon.Name} ({suffix})";
     public virtual int Damage => WrappedWeapon.Damage;
     public bool IsTwoHanded => WrappedWeapon.IsTwoHanded;
 

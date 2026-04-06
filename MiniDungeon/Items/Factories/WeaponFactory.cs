@@ -46,8 +46,8 @@ public class WeaponFactory : IWeaponProvider
 
     private void LoadModifiers()
     {
-        _modifiers.Add(w => new WeaponModifier(w, "sharp", damageBonus: 3));
-        _modifiers.Add(w => new WeaponModifier(w, "defensive", defenseBonus: 2));
-        _modifiers.Add(w => new WeaponModifier(w, "unlucky", luckBonus: -2));
+        _modifiers.Add(w => new DamageModifier(w, "sharp", 3));
+        _modifiers.Add(w => new DefenseModifier(w, "defensive", 2));
+        _modifiers.Add(w => new LuckModifier(w, "unlucky", -2));
     }
 }

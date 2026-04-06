@@ -1,6 +1,4 @@
-﻿using MiniDungeon.World;
-
-namespace MiniDungeon.Entities;
+﻿namespace MiniDungeon.Entities;
 
 public interface IEntity
 {

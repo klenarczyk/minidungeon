@@ -1,6 +1,4 @@
-﻿using MiniDungeon.World;
-
-namespace MiniDungeon.Entities;
+﻿namespace MiniDungeon.Entities;
 
 public class EnemyEntity(string name, int health, int attack, int armor) : IEntity
 {
