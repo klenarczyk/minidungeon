@@ -10,7 +10,7 @@ public abstract class WeaponItem(string name, int damage, bool isTwoHanded = fal
     public virtual int Damage { get; } = damage;
     public bool IsTwoHanded { get; } = isTwoHanded;
 
-    public override bool OnEquip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand)
+    public override bool Equip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand)
     {
         var inventory = player.Inventory;
         var equipment = player.Equipment;

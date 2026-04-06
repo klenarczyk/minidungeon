@@ -10,19 +10,18 @@ public class InventoryItem(string name) : IInventoryItem
 {
     public virtual string Name { get; } = name;
     
-    public bool OnPickup(Player player, Cell cell)
+    public virtual bool Collect(Player player, Cell cell, IInventoryItem item)
     {
-        if (!cell.TryRemoveItem(this)) return false;
-        if (!player.Inventory.TryAdd(this))
-        {
-            cell.TryAddItem(this);
-            return false;
-        }
+        if (!player.Inventory.TryAdd(item)) return false;
+        if (cell.TryRemoveItem(item)) return true;
         
-        return true;
+        player.Inventory.TryRemove(item);
+        return false;
     }
+
+    public virtual bool Collect(Player player, Cell cell) => Collect(player, cell, this);
     
-    public virtual bool OnEquip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand) => false;
+    public virtual bool Equip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand) => false;
 
     public virtual int GetHealthBonus() => 0;
     public virtual int GetStrengthBonus() => 0;

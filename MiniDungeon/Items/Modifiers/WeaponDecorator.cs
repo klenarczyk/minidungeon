@@ -13,17 +13,13 @@ public abstract class WeaponDecorator(IWeaponItem weapon) : IWeaponItem
     
     public virtual string Name => WrappedWeapon.Name;
     public virtual int Damage => WrappedWeapon.Damage;
-    public virtual bool IsTwoHanded => WrappedWeapon.IsTwoHanded;
-    
-    public bool OnPickup(Player player, Cell cell)
-    {
-        throw new NotImplementedException();
-    }
+    public bool IsTwoHanded => WrappedWeapon.IsTwoHanded;
 
-    public bool OnEquip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand)
-    {
-        throw new NotImplementedException();
-    }
+    public bool Collect(Player player, Cell cell) => WrappedWeapon.Collect(player, cell, this);
+    public bool Collect(Player player, Cell cell, IInventoryItem item) => WrappedWeapon.Collect(player, cell, item);
+
+    public bool Equip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand)
+     => WrappedWeapon.Equip(player, slot);
 
     public virtual int GetHealthBonus() => WrappedWeapon.GetHealthBonus();
     public virtual int GetStrengthBonus() => WrappedWeapon.GetStrengthBonus();
@@ -32,6 +28,6 @@ public abstract class WeaponDecorator(IWeaponItem weapon) : IWeaponItem
     public virtual int GetDexterityBonus() => WrappedWeapon.GetDexterityBonus();
     public virtual int GetLuckBonus() => WrappedWeapon.GetLuckBonus();
 
-    public virtual CombatStats Accept(IAttackVisitor visitor, Player player) 
+    public CombatStats Accept(IAttackVisitor visitor, Player player) 
         => WrappedWeapon.Accept(visitor, player);
 }

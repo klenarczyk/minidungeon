@@ -1,12 +1,14 @@
 ﻿using MiniDungeon.Combat;
 using MiniDungeon.Components;
 using MiniDungeon.Entities;
+using MiniDungeon.World;
 
 namespace MiniDungeon.Items.Abstractions;
 
 public interface IInventoryItem : IItem
 {
-    bool OnEquip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand);
+    bool Collect(Player player, Cell cell, IInventoryItem item);
+    bool Equip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand);
 
     int GetHealthBonus();
     int GetStrengthBonus();

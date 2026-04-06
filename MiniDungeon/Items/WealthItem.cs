@@ -9,7 +9,7 @@ public class WealthItem(string name, Action<Purse, int>? addToPurse = null) : II
 {
     public string Name { get; } = name;
     
-    public bool OnPickup(Player player, Cell cell)
+    public bool Collect(Player player, Cell cell)
     {
         if (!cell.TryRemoveItem(this)) return false;
         
@@ -17,7 +17,7 @@ public class WealthItem(string name, Action<Purse, int>? addToPurse = null) : II
         return true;
     }
 
-    public void AddToPurse(Purse purse, int amount = 1)
+    private void AddToPurse(Purse purse, int amount = 1)
     {
         addToPurse?.Invoke(purse, amount);
     }

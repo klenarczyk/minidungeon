@@ -6,5 +6,5 @@ namespace MiniDungeon.Items.Abstractions;
 public interface IItem
 {
     string Name { get; }
-    bool OnPickup(Player player, Cell cell);
+    bool Collect(Player player, Cell cell);
 }

@@ -13,7 +13,7 @@ public class PickUpCommand : ICommand
         if (cell.Items.Count == 0) return;
 
         var item = cell.Items[0];
-        if (!item.OnPickup(player, cell))
+        if (!item.Collect(player, cell))
         {
             session.Message = "Inventory full!";
             return;

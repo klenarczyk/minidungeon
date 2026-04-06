@@ -40,7 +40,7 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             return;
         };
 
-        session.Message = item.OnEquip(player, eqSlot) 
+        session.Message = item.Equip(player, eqSlot) 
             ? $"You equipped the {item.Name}." 
             : $"Cannot equip the two-handed {item.Name}.";
         
