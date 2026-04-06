@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Components;
+﻿using MiniDungeon.Combat;
+using MiniDungeon.Components;
 using MiniDungeon.Entities;
 using MiniDungeon.Items.Abstractions;
 
@@ -59,4 +60,8 @@ public abstract class WeaponItem(string name, int damage, bool isTwoHanded = fal
 
         return true;
     }
+
+    public abstract CombatStats Accept(IAttackVisitor visitor, Player player, IWeaponItem weapon);
+    public override CombatStats Accept(IAttackVisitor visitor, Player player)
+        => Accept(visitor, player, this);
 }

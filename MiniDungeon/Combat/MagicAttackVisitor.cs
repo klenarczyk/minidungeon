@@ -7,17 +7,17 @@ namespace MiniDungeon.Combat;
 
 public class MagicAttackVisitor : IAttackVisitor
 {
-    public CombatStats Visit(HeavyWeapon weapon, Player player)
+    public CombatStats Visit(HeavyWeapon weaponType, Player player, IWeaponItem weapon)
     {
         return new CombatStats(1, player.Luck);
     }
 
-    public CombatStats Visit(LightWeapon weapon, Player player)
+    public CombatStats Visit(LightWeapon weaponType, Player player, IWeaponItem weapon)
     {
         return new CombatStats(1, player.Luck);
     }
 
-    public CombatStats Visit(MagicWeapon weapon, Player player)
+    public CombatStats Visit(MagicWeapon weaponType, Player player, IWeaponItem weapon)
     {
         return new CombatStats(weapon.Damage, player.Intelligence * 2);
     }

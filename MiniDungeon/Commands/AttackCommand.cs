@@ -54,7 +54,7 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
     {
         var item = player.Equipment[EquipmentSlot.LeftHand] 
                     ?? player.Equipment[EquipmentSlot.RightHand] 
-                    ?? new InventoryItem("fist");
+                    ?? new InventoryItem("fists");
 
         var stats = item.Accept(attackVisitor, player);
         

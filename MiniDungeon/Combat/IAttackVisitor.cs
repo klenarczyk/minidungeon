@@ -7,9 +7,9 @@ namespace MiniDungeon.Combat;
 
 public interface IAttackVisitor
 {
-    CombatStats Visit(HeavyWeapon weapon, Player player);
-    CombatStats Visit(LightWeapon weapon, Player player);
-    CombatStats Visit(MagicWeapon weapon, Player player);
+    CombatStats Visit(HeavyWeapon weaponType, Player player, IWeaponItem weapon);
+    CombatStats Visit(LightWeapon weaponType, Player player, IWeaponItem weapon);
+    CombatStats Visit(MagicWeapon weaponType, Player player, IWeaponItem weapon);
     
     CombatStats Visit(IInventoryItem item, Player player);
 }

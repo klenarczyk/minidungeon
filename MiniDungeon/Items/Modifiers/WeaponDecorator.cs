@@ -29,5 +29,8 @@ public abstract class WeaponDecorator(IWeaponItem weapon) : IWeaponItem
     public virtual int GetLuckBonus() => WrappedWeapon.GetLuckBonus();
 
     public CombatStats Accept(IAttackVisitor visitor, Player player) 
-        => WrappedWeapon.Accept(visitor, player);
+        => WrappedWeapon.Accept(visitor, player, this);
+
+    public CombatStats Accept(IAttackVisitor visitor, Player player, IWeaponItem weapon)
+        => WrappedWeapon.Accept(visitor, player, weapon);
 }
