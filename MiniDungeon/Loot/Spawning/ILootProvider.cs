@@ -2,7 +2,9 @@
 
 namespace MiniDungeon.Loot.Spawning;
 
-public interface IWeaponProvider
+public interface ILootProvider
 {
+    IItem GetRandomItem();
+    IItem GetRandomWealth();
     IItem GetRandomWeapon();
 }

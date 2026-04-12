@@ -34,17 +34,9 @@ public class InstructionBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddCentralRoom(int width, int height) => this;
 
-    public IDungeonBuilder AddItems(int count)
-    {
-        BindItemCommands();        
-        return this;
-    }
+    public IDungeonBuilder AddItems(int count) => this;
 
-    public IDungeonBuilder AddWeapons()
-    {
-        BindItemCommands();
-        return this;
-    }
+    public IDungeonBuilder AddWeapons() => this;
 
     public IDungeonBuilder AddEnemies()
     {
@@ -108,5 +100,7 @@ public class InstructionBuilder : IDungeonBuilder
         BindKey(ConsoleKey.A, new MoveCommand(-1, 0));
         BindKey(ConsoleKey.S, new MoveCommand(0, 1));
         BindKey(ConsoleKey.D, new MoveCommand(1, 0));
+        
+        BindItemCommands();
     }
 }

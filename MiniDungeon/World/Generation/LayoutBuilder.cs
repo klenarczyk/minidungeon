@@ -1,9 +1,10 @@
 ﻿using MiniDungeon.Actors.Spawning;
 using MiniDungeon.Loot.Spawning;
+using MiniDungeon.World.Themes;
 
 namespace MiniDungeon.World.Generation;
 
-public class DungeonBuilder : IDungeonBuilder
+public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
 {
     private readonly Board _board = new();
     private readonly List<Room> _rooms = [];
@@ -120,8 +121,7 @@ public class DungeonBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddItems(int count)
     {
-        var misc = new MiscItemFactory();
-        var wealth = new WealthFactory();
+        var loot = theme.LootProvider;
 
         var freeCells = _board.GetFreeCells();
         if (freeCells.Count == 0) return this;
@@ -130,11 +130,11 @@ public class DungeonBuilder : IDungeonBuilder
         for (var i = 0; i < count; i++)
         {
             var cell = freeCells[random.Next(freeCells.Count)];
-            var type = random.Next(10);
+            var type = random.Next(2);
 
-            var item = (type < 3) 
-                ? wealth.GetRandomWealth() 
-                : misc.GetRandomItem();
+            var item = (type == 0) 
+                ? loot.GetRandomWealth() 
+                : loot.GetRandomItem();
 
             cell.TryAddItem(item);
         }
@@ -144,7 +144,7 @@ public class DungeonBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddWeapons()
     {
-        var weapon = new WeaponFactory();
+        var weapon = theme.LootProvider;
 
         var freeCells = _board.GetFreeCells();
         if (freeCells.Count == 0) return this;
@@ -163,7 +163,7 @@ public class DungeonBuilder : IDungeonBuilder
 
     public IDungeonBuilder AddEnemies()
     {
-        var enemies = new EnemyFactory();
+        var enemies = theme.EnemyProvider;
 
         var freeCells = _board.GetFreeCells();
         if (freeCells.Count <= 1) return this;
@@ -190,7 +190,14 @@ public class DungeonBuilder : IDungeonBuilder
         if (_board.StartingPosition is { X: 0, Y: 0 } && _board[0, 0].Type == CellType.Wall)
         {
             _board[0, 0] = new Cell {  Type = CellType.Empty };
-        } 
+        }
+
+        var random = new Random();
+        var freeCells = _board.GetFreeCells();
+        var cell = freeCells[random.Next(freeCells.Count)];
+        var artifact = theme.CreateArtifact();
+            
+        cell.TryAddItem(artifact);
         
         return _board;
     }

@@ -1,6 +1,7 @@
 ﻿using MiniDungeon.Engine.Input;
 using MiniDungeon.Engine.UI;
 using MiniDungeon.World.Generation;
+using MiniDungeon.World.Themes;
 
 namespace MiniDungeon.Engine;
 
@@ -17,12 +18,13 @@ public class Game : IGameContext
 
     public Game()
     {
-        var dungeonBuilder = new DungeonBuilder();
-        var instructionBuilder = new InstructionBuilder();
-        var director = new DungeonDirector();
+        IDungeonTheme theme = new WorkshopTheme();
         
-        director.CreateStandardDungeon(dungeonBuilder);
-        director.CreateStandardDungeon(instructionBuilder);
+        var layoutBuilder = new LayoutBuilder(theme);
+        var instructionBuilder = new InstructionBuilder();
+        
+        theme.GenerateDungeon(layoutBuilder);
+        theme.GenerateDungeon(instructionBuilder);
 
         var baseInputChain = instructionBuilder.GetInputChain();
         if (baseInputChain != null)
@@ -30,8 +32,11 @@ public class Game : IGameContext
             PushInputChain(baseInputChain);
             _renderer.UpdateInstructions(instructionBuilder.GetInstructions());
         }
-    
-        Session = new GameSession(dungeonBuilder.Build());
+
+        Session = new GameSession(layoutBuilder.Build())
+        {
+            Message = theme.EntryMessage
+        };
     }
     
     public void Run()
