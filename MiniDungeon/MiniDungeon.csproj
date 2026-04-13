@@ -12,9 +12,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Engine\Persistence\" />
-  </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Engine.Configuration;
 using MiniDungeon.Engine.Input;
+using MiniDungeon.Engine.Persistence;
 using MiniDungeon.Engine.UI;
 using MiniDungeon.World.Generation;
 using MiniDungeon.World.Themes;
@@ -21,6 +22,9 @@ public class Game : IGameContext
     {
         var configPath = Path.Combine(AppContext.BaseDirectory, "Engine", "Configuration", "config.json");
         var config = ConfigLoader.Load(configPath);
+        
+        var logger = new FileLogger(config);
+        Journal.Initialize(logger);
         
         IDungeonTheme theme = new WorkshopTheme();
         
@@ -57,6 +61,9 @@ public class Game : IGameContext
             var key = Console.ReadKey(true).Key;
             var command = currentChain.Handle(key);
             command.Execute(this);
+            
+            if (Journal.Instance.Entries.Count > 0)
+                Session.Message = Journal.Instance.Entries[^1];
             
             Session.InputMode = _inputChains.Peek().InputMode;
             _renderer.Render(Session);

@@ -2,6 +2,7 @@
 using MiniDungeon.Combat;
 using MiniDungeon.Engine;
 using MiniDungeon.Engine.Commands;
+using MiniDungeon.Engine.Persistence;
 
 namespace MiniDungeon.World;
 
@@ -18,7 +19,11 @@ public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
         {
             var attackCommandInit = new InitBattleCommand(session.Board[x, y]);
             attackCommandInit.Execute(context);
-        } else if (IsValidMove(session, x, y))
+        } else if (!IsValidMove(session, x, y))
+        {
+            Journal.Instance.Log("You bumped into a wall.");
+        }
+        else
         {
             player.Position = new Position(x, y);
         }

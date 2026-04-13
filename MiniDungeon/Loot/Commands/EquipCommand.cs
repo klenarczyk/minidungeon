@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Engine;
 using MiniDungeon.Engine.Commands;
+using MiniDungeon.Engine.Persistence;
 
 namespace MiniDungeon.Loot.Commands;
 
@@ -20,14 +21,13 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
         {
             if (equipment[eqSlot] == null)
             {
-                session.Message = "";
                 context.PopInputChain();
                 return;
             }
 
             if (!inventory.HasSpace)
             {
-                session.Message = "Inventory full!";
+                Journal.Instance.Log("Inventory full!");
                 context.PopInputChain();
                 return;
             }
@@ -35,14 +35,15 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             equipment.TryUnequip(eqSlot, out item);
             inventory.TryAdd(item!);
             
-            session.Message = $"You unequipped the {item!.Name}.";
+            Journal.Instance.Log($"You unequipped the {item!.Name}.");
             context.PopInputChain();
             return;
         };
 
-        session.Message = item.Equip(player, eqSlot) 
+        var message = item.Equip(player, eqSlot) 
             ? $"You equipped the {item.Name}." 
             : $"Cannot equip the two-handed {item.Name}.";
+        Journal.Instance.Log(message);
         
         context.PopInputChain();
     }

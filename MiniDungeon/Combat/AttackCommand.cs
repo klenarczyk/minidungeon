@@ -2,6 +2,7 @@
 using MiniDungeon.Combat.Attacks;
 using MiniDungeon.Engine;
 using MiniDungeon.Engine.Commands;
+using MiniDungeon.Engine.Persistence;
 using MiniDungeon.Loot;
 using MiniDungeon.Loot.Items;
 using MiniDungeon.World;
@@ -27,7 +28,7 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
         var playerDmg = enemy.TakeDamage(stats.Damage);
         if (enemy.IsDead)
         {
-            session.Message = $"{enemy.Name} is defeated!";
+            Journal.Instance.Log($"{enemy.Name} is defeated!");
             cell.Entity = null;
             context.PopInputChain();
             return;
@@ -36,13 +37,14 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
         var enemyDmg = EnemyAttack(enemy, player, stats.Defense);
         if (player.IsDead)
         {
-            session.Message = $"{player.Name} Died | Game Over!";
+            Journal.Instance.Log($"{player.Name} Died | Game Over!");
             session.IsRunning = false;
             context.PopInputChain();
             return;
         }
 
-        session.Message = $"{player.Name}: {playerDmg}DMG, {player.Health}HP | Enemy: {enemyDmg}DMG, {enemy.Health}HP";
+        Journal.Instance.Log($"{player.Name}: {playerDmg}DMG, {player.Health}HP |" +
+                             $" Enemy: {enemyDmg}DMG, {enemy.Health}HP");
     }
 
     private int EnemyAttack(IEntity enemy, Player player, int defense)

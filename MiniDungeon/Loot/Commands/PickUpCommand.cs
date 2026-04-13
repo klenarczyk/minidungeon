@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Engine;
 using MiniDungeon.Engine.Commands;
+using MiniDungeon.Engine.Persistence;
 
 namespace MiniDungeon.Loot.Commands;
 
@@ -20,6 +21,6 @@ public class PickUpCommand : ICommand
             return;
         } 
         
-        session.Message = $"You picked up the {item.Name}.";
+        Journal.Instance.Log($"You picked up the {item.Name}.");
     }
 }

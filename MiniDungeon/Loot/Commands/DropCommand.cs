@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Engine;
 using MiniDungeon.Engine.Commands;
+using MiniDungeon.Engine.Persistence;
 
 namespace MiniDungeon.Loot.Commands;
 
@@ -15,7 +16,7 @@ public class DropCommand(int invSlot) : ICommand
 
         if (inv.Count <= 0 || invSlot < 0 || invSlot >= inv.Count)
         {
-            session.Message = "No item in selected slot.";
+            Journal.Instance.Log("No item in selected slot.");
             context.PopInputChain();
             return;
         }
@@ -26,17 +27,17 @@ public class DropCommand(int invSlot) : ICommand
             if (!cell.TryAddItem(item!))
             {
                 inv.TryAdd(item!, invSlot);
-                session.Message = $"Failed to drop the {item!.Name}.";
+                Journal.Instance.Log($"Failed to drop the {item!.Name}.");
                 context.PopInputChain();
                 return;
             }
             
-            session.Message = $"You dropped the {item!.Name}.";
+            Journal.Instance.Log($"You dropped the {item!.Name}.");
             context.PopInputChain();
             return;
         }
         
-        session.Message = "Failed to drop the item.";
+        Journal.Instance.Log("Failed to drop the item.");
         
         context.PopInputChain();
     }

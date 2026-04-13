@@ -95,6 +95,7 @@ public class InstructionBuilder : IDungeonBuilder
         _instructions.Clear();
         
         BindKey(ConsoleKey.Escape, new ExitCommand(), "Quit (Esc)");
+        AddInstruction(ConsoleKey.Backspace, "Return (Bck)");
         
         BindKey(ConsoleKey.W, new MoveCommand(0, -1), "Move (WASD)");
         BindKey(ConsoleKey.A, new MoveCommand(-1, 0));
