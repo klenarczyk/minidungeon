@@ -7,10 +7,11 @@ public class EnemyEntity(string name, int health, int attack, int armor) : IEnti
     public int Health { get; protected set; } = health;
     public bool IsDead => Health <= 0;
 
-    public void TakeDamage(int damage)
+    public int TakeDamage(int damage)
     {
         var realDmg = Math.Max(0, damage - armor);
         Health -= realDmg;
+        return realDmg;
     }
 
     public int DealDamage()

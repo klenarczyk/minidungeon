@@ -1,4 +1,5 @@
-﻿using MiniDungeon.Engine.Input;
+﻿using MiniDungeon.Engine.Configuration;
+using MiniDungeon.Engine.Input;
 using MiniDungeon.Engine.UI;
 using MiniDungeon.World.Generation;
 using MiniDungeon.World.Themes;
@@ -18,6 +19,9 @@ public class Game : IGameContext
 
     public Game()
     {
+        var configPath = Path.Combine(AppContext.BaseDirectory, "Engine", "Configuration", "config.json");
+        var config = ConfigLoader.Load(configPath);
+        
         IDungeonTheme theme = new WorkshopTheme();
         
         var layoutBuilder = new LayoutBuilder(theme);
@@ -37,6 +41,7 @@ public class Game : IGameContext
         {
             Message = theme.EntryMessage
         };
+        Session.Player.Name = config.PlayerName;
     }
     
     public void Run()

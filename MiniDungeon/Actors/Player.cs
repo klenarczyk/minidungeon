@@ -5,6 +5,7 @@ namespace MiniDungeon.Actors;
 
 public class Player
 {
+    public string Name { get; set; } = "Player";
     public Position Position { get; set; }
     public Attributes BaseAttributes { get; }
     public Inventory Inventory { get; } = new();

@@ -24,7 +24,7 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
             return;
         }
         
-        enemy.TakeDamage(stats.Damage);
+        var playerDmg = enemy.TakeDamage(stats.Damage);
         if (enemy.IsDead)
         {
             session.Message = $"{enemy.Name} is defeated!";
@@ -33,22 +33,23 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
             return;
         }
         
-        EnemyAttack(enemy, player, stats.Defense);
+        var enemyDmg = EnemyAttack(enemy, player, stats.Defense);
         if (player.IsDead)
         {
-            session.Message = "You Died | Game Over!";
+            session.Message = $"{player.Name} Died | Game Over!";
             session.IsRunning = false;
             context.PopInputChain();
             return;
         }
 
-        session.Message = $"You: {player.Health}HP | Enemy: {enemy.Health}HP";
+        session.Message = $"{player.Name}: {playerDmg}DMG, {player.Health}HP | Enemy: {enemyDmg}DMG, {enemy.Health}HP";
     }
 
-    private void EnemyAttack(IEntity enemy, Player player, int defense)
+    private int EnemyAttack(IEntity enemy, Player player, int defense)
     {
         var dmg = Math.Max(0, enemy.DealDamage() - defense);
         player.Health -= dmg;
+        return dmg;
     }
 
     private CombatStats GetCombatStats(Player player)

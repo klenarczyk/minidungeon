@@ -11,7 +11,7 @@ public class StatDisplay : IDisplayElement
         var player = session.Player;
         var currentY = StartY;
 
-        DrawLine("PLAYER:");
+        DrawLine($"{player.Name}:");
         DrawLine($"  HP:  {player.Health}/{player.MaxHealth}");
         DrawLine($"  STR: {player.Strength,-3}");
         DrawLine($"  DEF: {player.Defense,-3}");
