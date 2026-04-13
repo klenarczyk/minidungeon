@@ -101,6 +101,8 @@ public class InstructionBuilder : IDungeonBuilder
         BindKey(ConsoleKey.A, new MoveCommand(-1, 0));
         BindKey(ConsoleKey.S, new MoveCommand(0, 1));
         BindKey(ConsoleKey.D, new MoveCommand(1, 0));
+
+        BindKey(ConsoleKey.J, new ShowJournalCommand(), "Journal (J)");
         
         BindItemCommands();
     }
