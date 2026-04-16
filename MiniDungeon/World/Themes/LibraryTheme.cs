@@ -4,6 +4,7 @@ using MiniDungeon.Loot.Items.Modifiers;
 using MiniDungeon.Loot.Items.Weapons;
 using MiniDungeon.Loot.Spawning;
 using MiniDungeon.World.Generation;
+using MiniDungeon.World.Generation.Templates;
 
 namespace MiniDungeon.World.Themes;
 
@@ -11,16 +12,7 @@ public class LibraryTheme : IDungeonTheme
 {
     public string EntryMessage => "The smell of old books fills the air...";
 
-    public void GenerateDungeon(IDungeonBuilder builder)
-    {
-        builder
-            .InitializeFilled()
-            .AddRooms()
-            .AddCorridors()
-            .AddItems(20)
-            .AddWeapons()
-            .AddEnemies();
-    }
+    public IGenerationTemplate GenerationTemplate => new LibraryTemplate();
 
     public ILootProvider LootProvider { get; } = new LibraryLootFactory();
     public IEnemyProvider EnemyProvider { get; } = new LibraryEnemyFactory();

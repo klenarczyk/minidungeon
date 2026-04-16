@@ -4,23 +4,14 @@ using MiniDungeon.Loot.Items.Modifiers;
 using MiniDungeon.Loot.Items.Weapons;
 using MiniDungeon.Loot.Spawning;
 using MiniDungeon.World.Generation;
+using MiniDungeon.World.Generation.Templates;
 
 namespace MiniDungeon.World.Themes;
 
 public class WorkshopTheme : IDungeonTheme
 {
     public string EntryMessage => "You hear the sound of grinding gears...";
-    public void GenerateDungeon(IDungeonBuilder builder)
-    {
-        builder
-            .InitializeFilled()
-            .AddCentralRoom(10, 5)
-            .AddRooms()
-            .AddCorridors()
-            .AddItems(20)
-            .AddWeapons()
-            .AddEnemies();
-    }
+    public IGenerationTemplate GenerationTemplate => new WorkshopTemplate();
 
     public ILootProvider LootProvider { get; } = new WorkshopLootFactory();
     public IEnemyProvider EnemyProvider { get; } = new WorkshopEnemyFactory();

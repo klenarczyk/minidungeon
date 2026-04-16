@@ -31,8 +31,8 @@ public class Game : IGameContext
         var layoutBuilder = new LayoutBuilder(theme);
         var instructionBuilder = new InstructionBuilder();
         
-        theme.GenerateDungeon(layoutBuilder);
-        theme.GenerateDungeon(instructionBuilder);
+        theme.GenerationTemplate.Use(layoutBuilder);
+        theme.GenerationTemplate.Use(instructionBuilder);
 
         var baseInputChain = instructionBuilder.GetInputChain();
         if (baseInputChain != null)
