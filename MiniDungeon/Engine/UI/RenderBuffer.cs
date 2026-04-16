@@ -65,7 +65,7 @@ public class RenderBuffer
         sb.Append(ResetColor);
         
         if (!string.IsNullOrWhiteSpace(Instructions))
-            sb.Append($"\n{Instructions}");
+            sb.Append($"\n{Instructions}\n");
         
         Console.SetCursorPosition(0, 0);
         Console.Write(sb.ToString());

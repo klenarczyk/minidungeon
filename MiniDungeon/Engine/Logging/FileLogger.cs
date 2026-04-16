@@ -1,6 +1,6 @@
 ﻿using MiniDungeon.Engine.Configuration;
 
-namespace MiniDungeon.Engine.Persistence;
+namespace MiniDungeon.Engine.Logging;
 
 public class FileLogger : ILogger
 {
@@ -20,5 +20,10 @@ public class FileLogger : ILogger
     {
         _entries.Add(message);
         File.AppendAllText(_filePath, message + Environment.NewLine);
+    }
+
+    public void OnExit()
+    {
+        Console.WriteLine("Log file: " + _filePath);
     }
 }

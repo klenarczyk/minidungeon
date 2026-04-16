@@ -1,6 +1,6 @@
 ﻿using MiniDungeon.Engine.Configuration;
 using MiniDungeon.Engine.Input;
-using MiniDungeon.Engine.Persistence;
+using MiniDungeon.Engine.Logging;
 using MiniDungeon.Engine.UI;
 using MiniDungeon.World.Generation;
 using MiniDungeon.World.Themes;
@@ -68,5 +68,7 @@ public class Game : IGameContext
             Session.InputMode = _inputChains.Peek().InputMode;
             _renderer.Render(Session);
         }
+        
+        Journal.Instance.OnExit();
     }
 }

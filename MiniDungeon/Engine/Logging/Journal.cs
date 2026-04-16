@@ -1,6 +1,4 @@
-﻿using MiniDungeon.Engine.Configuration;
-
-namespace MiniDungeon.Engine.Persistence;
+﻿namespace MiniDungeon.Engine.Logging;
 
 public static class Journal
 {
