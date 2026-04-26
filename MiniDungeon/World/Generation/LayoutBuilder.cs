@@ -1,6 +1,4 @@
-﻿using MiniDungeon.Actors.Spawning;
-using MiniDungeon.Loot.Spawning;
-using MiniDungeon.World.Themes;
+﻿using MiniDungeon.World.Themes;
 
 namespace MiniDungeon.World.Generation;
 
@@ -169,17 +167,22 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
         if (freeCells.Count <= 1) return this;
 
         var random = new Random();
-        var attempts = 0;
-        for (var i = 0; i < random.Next(3, 7) && attempts < 20; i++)
+        for (var i = 0; i < 3; i++)
         {
-            var cell = freeCells[random.Next(freeCells.Count)];
-            if (cell.Type != CellType.Wall &&
-                cell.Entity == null &&
-                cell != _board[_board.StartingPosition])
+            var recipe = enemies.GetRandomRecipe();
+            
+            var attempts = 0;
+            for (var j = 0; j < 3 && attempts < 20; j++)
             {
-                cell.Entity = enemies.SpawnRandomEntity();
+                var cell = freeCells[random.Next(freeCells.Count)];
+                if (cell.Type != CellType.Wall &&
+                    cell.Entity == null &&
+                    cell != _board[_board.StartingPosition])
+                {
+                    cell.Entity = recipe.Invoke();
+                }
+                else attempts++;
             }
-            else attempts++;
         }
         
         return this;

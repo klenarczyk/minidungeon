@@ -29,6 +29,7 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
         if (enemy.IsDead)
         {
             Journal.Instance.Log($"{enemy.Name} is defeated!");
+            enemy.Die();
             cell.Entity = null;
             context.PopInputChain();
             return;

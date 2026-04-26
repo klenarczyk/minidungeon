@@ -1,11 +1,14 @@
-﻿namespace MiniDungeon.Actors.Spawning;
+﻿using MiniDungeon.Actors.Enemies;
+using MiniDungeon.Actors.Enemies.Behaviors;
+
+namespace MiniDungeon.Actors.Spawning;
 
 public class TreasuryEnemyFactory : EnemyFactory
 {
     public TreasuryEnemyFactory()
     {
-        Enemies.Add(() => new EnemyEntity("Goblin", 18, 8, 2));
-        Enemies.Add(() => new EnemyEntity("Guard", 35, 9, 1));
-        Enemies.Add(() => new EnemyEntity("Mimic", 16, 7, 4));
+        AddSpecies("Goblin", 18, 8, 2, new CowardlyBehavior());
+        AddSpecies("Guard", 35, 9, 1, new VengefulBehavior());
+        AddSpecies("Mimic", 16, 7, 4, new CowardlyBehavior());
     }
 }
