@@ -1,9 +1,11 @@
-﻿using MiniDungeon.Engine;
+﻿using MiniDungeon.Actors.Enemies;
+using MiniDungeon.Engine;
 using MiniDungeon.World;
+using MiniDungeon.World.Systems;
 
 namespace MiniDungeon.Actors;
 
-public interface IEntity
+public interface IEntity : ISpeciesObserver, INoiseObserver
 {
     string Name { get; }
     int Health { get; }
@@ -14,6 +16,5 @@ public interface IEntity
     int TakeDamage(int damage);
     int DealDamage();
     void Die(GameSession session);
-    void Move(IGameContext context, Position position);
-    void RandomMove(IGameContext context);
+    void Move(IGameContext context);
 }

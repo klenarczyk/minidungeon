@@ -1,13 +1,23 @@
 ﻿using MiniDungeon.Actors;
-using MiniDungeon.Engine;
+using MiniDungeon.World.Systems;
 using MiniDungeon.World.Themes;
 
 namespace MiniDungeon.World.Generation;
 
-public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDungeonBuilder
+public class LayoutBuilder : IDungeonBuilder
 {
     private readonly Board _board = new();
+    private readonly IDungeonTheme _theme;
+    private readonly List<IEntity> _entityList;
+    private readonly INoiseSubject _noiseSubject;
     private readonly List<Room> _rooms = [];
+
+    public LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList)
+    {
+        _theme = theme;
+        _entityList = entityList;
+        _noiseSubject = new NoiseNotifier(_board);
+    }
     
     public IDungeonBuilder InitializeEmpty()
     {
@@ -121,7 +131,7 @@ public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDun
 
     public IDungeonBuilder AddItems(int count)
     {
-        var loot = theme.LootProvider;
+        var loot = _theme.LootProvider;
 
         var freeCells = _board.GetFreeCells();
         if (freeCells.Count == 0) return this;
@@ -144,7 +154,7 @@ public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDun
 
     public IDungeonBuilder AddWeapons()
     {
-        var weapon = theme.LootProvider;
+        var weapon = _theme.LootProvider;
 
         var freeCells = _board.GetFreeCells();
         if (freeCells.Count == 0) return this;
@@ -154,6 +164,7 @@ public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDun
         {
             var cell = freeCells[random.Next(freeCells.Count)];
             var item = weapon.GetRandomWeapon();
+            item.NoiseSubject = _noiseSubject;
             
             cell.TryAddItem(item);
         }
@@ -163,7 +174,8 @@ public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDun
 
     public IDungeonBuilder AddEnemies()
     {
-        var enemies = theme.EnemyProvider;
+        var enemies = _theme.EnemyProvider;
+        enemies.NoiseSubject = _noiseSubject;
 
         var freeCells = _board.GetFreeCells();
         if (freeCells.Count <= 1) return this;
@@ -184,7 +196,7 @@ public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDun
                     var entity = recipe.Invoke();
                     entity.Position = cell.Position;
                     cell.Entity = entity;
-                    entityList.Add(entity);
+                    _entityList.Add(entity);
                 }
                 else attempts++;
             }
@@ -203,8 +215,7 @@ public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDun
         var random = new Random();
         var freeCells = _board.GetFreeCells();
         var cell = freeCells[random.Next(freeCells.Count)];
-        var artifact = theme.CreateArtifact();
-            
+        var artifact = _theme.CreateArtifact();
         cell.TryAddItem(artifact);
         
         return _board;

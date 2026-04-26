@@ -3,6 +3,7 @@ using MiniDungeon.Combat;
 using MiniDungeon.Combat.Attacks;
 using MiniDungeon.Loot.Items.Weapons;
 using MiniDungeon.World;
+using MiniDungeon.World.Systems;
 
 namespace MiniDungeon.Loot.Items.Modifiers;
 
@@ -13,6 +14,12 @@ public abstract class WeaponDecorator(IWeaponItem weapon, string suffix) : IWeap
     public string Name => $"{WrappedWeapon.Name} ({suffix})";
     public virtual int Damage => WrappedWeapon.Damage;
     public bool IsTwoHanded => WrappedWeapon.IsTwoHanded;
+
+    public INoiseSubject? NoiseSubject
+    {
+        get => WrappedWeapon.NoiseSubject;
+        set => WrappedWeapon.NoiseSubject = value;
+    }
 
     public bool Collect(Player player, Cell cell) => WrappedWeapon.Collect(player, cell, this);
     public bool Collect(Player player, Cell cell, IInventoryItem item) => WrappedWeapon.Collect(player, cell, item);

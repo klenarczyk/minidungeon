@@ -1,4 +1,6 @@
-﻿namespace MiniDungeon.World;
+﻿using MiniDungeon.World.Systems;
+
+namespace MiniDungeon.World;
 
 public class Board
 {

@@ -1,6 +1,7 @@
 ﻿using MiniDungeon.Actors;
 using MiniDungeon.Combat;
 using MiniDungeon.Combat.Attacks;
+using MiniDungeon.World.Systems;
 
 namespace MiniDungeon.Loot.Items.Weapons;
 
@@ -9,6 +10,8 @@ public abstract class WeaponItem(string name, int damage, bool isTwoHanded = fal
 {
     public virtual int Damage { get; } = damage;
     public bool IsTwoHanded { get; } = isTwoHanded;
+    
+    public INoiseSubject? NoiseSubject { get; set; }
 
     public override bool Equip(Player player, EquipmentSlot slot = EquipmentSlot.LeftHand)
     {

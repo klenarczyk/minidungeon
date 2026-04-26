@@ -1,10 +1,13 @@
 ﻿using MiniDungeon.Actors.Enemies;
 using MiniDungeon.Actors.Enemies.Behaviors;
+using MiniDungeon.World.Systems;
 
 namespace MiniDungeon.Actors.Spawning;
 
 public abstract class EnemyFactory : IEnemyProvider
 {
+    public INoiseSubject? NoiseSubject { get; set; }
+    
     private readonly List<Func<EnemyEntity>> _enemies = [];
     private readonly Random _random = new();
 
@@ -21,9 +24,10 @@ public abstract class EnemyFactory : IEnemyProvider
         var speciesSubject = new SpeciesNotifier();
         _enemies.Add(() =>
         {
-            var species = new EnemyEntity(name, health, attack, armor, behavior, speciesSubject);
-            speciesSubject.Attach(species);
-            return species;
+            var enemy = new EnemyEntity(name, health, attack, armor, behavior, speciesSubject, NoiseSubject);
+            speciesSubject.Attach(enemy);
+            NoiseSubject?.Attach(enemy);
+            return enemy;
         });
     }
 }

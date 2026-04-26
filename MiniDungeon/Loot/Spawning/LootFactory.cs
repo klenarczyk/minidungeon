@@ -24,7 +24,7 @@ public abstract class LootFactory : ILootProvider
         return recipe.Invoke();
     }
 
-    public IItem GetRandomWeapon()
+    public IWeaponItem GetRandomWeapon()
     {
         var maxModifiers = Math.Min(3, Modifiers.Count);
         

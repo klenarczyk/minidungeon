@@ -5,6 +5,7 @@ using MiniDungeon.Engine.Logging;
 using MiniDungeon.Engine.UI;
 using MiniDungeon.World;
 using MiniDungeon.World.Generation;
+using MiniDungeon.World.Systems;
 using MiniDungeon.World.Themes;
 
 namespace MiniDungeon.Engine;
@@ -44,7 +45,9 @@ public class Game : IGameContext
             _renderer.UpdateInstructions(instructionBuilder.GetInstructions());
         }
 
-        Session = new GameSession(layoutBuilder.Build())
+        var board = layoutBuilder.Build();
+        
+        Session = new GameSession(board)
         {
             Message = theme.EntryMessage,
             Player =
@@ -59,31 +62,36 @@ public class Game : IGameContext
     {
         _renderer.Init();
         _renderer.Render(Session);
-        
-        while (Session.IsRunning)
+
+        try
         {
-            if (_inputChains.Count == 0) break;
-            var currentChain = _inputChains.Peek().Handler;
-
-            var key = Console.ReadKey(true).Key;
-            var command = currentChain.Handle(key);
-            var timePassed = command.Execute(this);
-
-            if (timePassed)
+            while (Session.IsRunning)
             {
-                foreach (var entity in Session.Entities)
+                if (_inputChains.Count == 0) break;
+                var currentChain = _inputChains.Peek().Handler;
+
+                var key = Console.ReadKey(true).Key;
+                var command = currentChain.Handle(key);
+                var timePassed = command.Execute(this);
+
+                if (timePassed)
                 {
-                    entity.RandomMove(this);
+                    foreach (var entity in Session.Entities)
+                    {
+                        entity.Move(this);
+                    }
                 }
+
+                if (Journal.Instance.Entries.Count > 0)
+                    Session.Message = Journal.Instance.Entries[^1];
+
+                Session.InputMode = _inputChains.Peek().InputMode;
+                _renderer.Render(Session);
             }
-            
-            if (Journal.Instance.Entries.Count > 0)
-                Session.Message = Journal.Instance.Entries[^1];
-            
-            Session.InputMode = _inputChains.Peek().InputMode;
-            _renderer.Render(Session);
         }
-        
-        Journal.Instance.OnExit();
+        finally
+        {
+            Journal.Instance.OnExit();   
+        }
     }
 }
