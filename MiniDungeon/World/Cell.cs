@@ -11,9 +11,10 @@ public enum CellType
     Wall
 }
 
-public class Cell
+public class Cell(Position position)
 {
     public CellType Type { get; init; }
+    public Position Position { get; } = position;
     
     private readonly List<IItem> _items = [];
     public IReadOnlyList<IItem> Items => _items;

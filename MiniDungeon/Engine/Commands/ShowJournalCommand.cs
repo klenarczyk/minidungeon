@@ -4,7 +4,7 @@ namespace MiniDungeon.Engine.Commands;
 
 public class ShowJournalCommand : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
@@ -14,5 +14,6 @@ public class ShowJournalCommand : ICommand
         
         context.PushInputChain(inputChain, "Journal");
         context.Session.ShowJournal = true;
+        return false;
     }
 }

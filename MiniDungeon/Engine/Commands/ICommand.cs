@@ -2,5 +2,8 @@
 
 public interface ICommand
 {
-    void Execute(IGameContext context);
+    /// <summary>
+    /// <returns>true - time moved; false - time is frozen</returns>
+    /// </summary>
+    bool Execute(IGameContext context);
 }

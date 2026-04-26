@@ -6,7 +6,7 @@ namespace MiniDungeon.Loot.Commands;
 
 public class DropCommand(int invSlot) : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         var session = context.Session;
         
@@ -18,7 +18,7 @@ public class DropCommand(int invSlot) : ICommand
         {
             Journal.Instance.Log("No item in selected slot.");
             context.PopInputChain();
-            return;
+            return false;
         }
         inv.SelectedSlot =  invSlot;
         
@@ -29,16 +29,17 @@ public class DropCommand(int invSlot) : ICommand
                 inv.TryAdd(item!, invSlot);
                 Journal.Instance.Log($"Failed to drop the {item!.Name}.");
                 context.PopInputChain();
-                return;
+                return false;
             }
             
             Journal.Instance.Log($"You dropped the {item!.Name}.");
             context.PopInputChain();
-            return;
+            return true;
         }
         
         Journal.Instance.Log("Failed to drop the item.");
         
         context.PopInputChain();
+        return false;
     }
 }

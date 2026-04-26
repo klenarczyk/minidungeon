@@ -2,8 +2,9 @@
 
 public class ExitCommand : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         context.Session.IsRunning = false;
+        return false;
     }
 }

@@ -6,7 +6,7 @@ namespace MiniDungeon.Loot.Commands;
 
 public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         var session = context.Session;
         
@@ -22,14 +22,14 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             if (equipment[eqSlot] == null)
             {
                 context.PopInputChain();
-                return;
+                return false;
             }
 
             if (!inventory.HasSpace)
             {
                 Journal.Instance.Log("Inventory full!");
                 context.PopInputChain();
-                return;
+                return false;
             }
 
             equipment.TryUnequip(eqSlot, out item);
@@ -37,7 +37,7 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             
             Journal.Instance.Log($"You unequipped the {item!.Name}.");
             context.PopInputChain();
-            return;
+            return true;
         };
 
         var message = item.Equip(player, eqSlot) 
@@ -46,5 +46,6 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
         Journal.Instance.Log(message);
         
         context.PopInputChain();
+        return false;
     }
 }

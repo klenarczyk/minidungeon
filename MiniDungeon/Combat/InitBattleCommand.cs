@@ -10,7 +10,7 @@ namespace MiniDungeon.Combat;
 
 public class InitBattleCommand(Cell cell) : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
@@ -37,5 +37,6 @@ public class InitBattleCommand(Cell cell) : ICommand
             new SingleInputHandler(ConsoleKey.Backspace, new ReturnCommand()));
         
         context.PushInputChain(inputChain, "Battle");
+        return false;
     }
 }

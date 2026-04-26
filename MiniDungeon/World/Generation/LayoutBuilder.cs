@@ -1,8 +1,10 @@
-﻿using MiniDungeon.World.Themes;
+﻿using MiniDungeon.Actors;
+using MiniDungeon.Engine;
+using MiniDungeon.World.Themes;
 
 namespace MiniDungeon.World.Generation;
 
-public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
+public class LayoutBuilder(IDungeonTheme theme, List<IEntity> entityList) : IDungeonBuilder
 {
     private readonly Board _board = new();
     private readonly List<Room> _rooms = [];
@@ -15,7 +17,7 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
         for (var x = 0; x < Board.Columns; x++)
         for (var y = 0; y < Board.Rows; y++)
         { 
-            _board[x, y] = new Cell { Type = CellType.Empty };
+            _board[x, y] = new Cell(new Position(x, y)) { Type = CellType.Empty };
         }
         
         return this;
@@ -29,7 +31,7 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
         for (var x = 0; x < Board.Columns; x++)
         for (var y = 0; y < Board.Rows; y++)
         { 
-            _board[x, y] = new Cell { Type = CellType.Wall };
+            _board[x, y] = new Cell(new Position(x, y)) { Type = CellType.Wall };
         }
         
         return this;
@@ -179,7 +181,10 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
                     cell.Entity == null &&
                     cell != _board[_board.StartingPosition])
                 {
-                    cell.Entity = recipe.Invoke();
+                    var entity = recipe.Invoke();
+                    entity.Position = cell.Position;
+                    cell.Entity = entity;
+                    entityList.Add(entity);
                 }
                 else attempts++;
             }
@@ -192,7 +197,7 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
     {
         if (_board.StartingPosition is { X: 0, Y: 0 } && _board[0, 0].Type == CellType.Wall)
         {
-            _board[0, 0] = new Cell {  Type = CellType.Empty };
+            _board[0, 0] = new Cell(new Position()) {  Type = CellType.Empty };
         }
 
         var random = new Random();
@@ -213,7 +218,7 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
         for (var x = room.TopLeft.X; x <= room.BottomRight.X && x < Board.Columns; x++)
         for (var y = room.TopLeft.Y; y <= room.BottomRight.Y && y < Board.Rows; y++)
         {
-            _board[x, y] = new Cell { Type = CellType.Empty };
+            _board[x, y] = new Cell(new Position(x, y)) { Type = CellType.Empty };
         }
     }
 
@@ -230,19 +235,19 @@ public class LayoutBuilder(IDungeonTheme theme) : IDungeonBuilder
         if (random.Next(0, 1) == 0)
         {
             for (var x = startX; x <= endX; x++)
-                _board[x, roomA.Y] = new Cell { Type = CellType.Empty };
+                _board[x, roomA.Y] = new Cell(new Position(x, roomA.Y)) { Type = CellType.Empty };
 
             for (var y = startY; y <= endY; y++)
-                _board[roomB.X, y] = new Cell { Type = CellType.Empty };
+                _board[roomB.X, y] = new Cell(new Position(roomB.X, y)) { Type = CellType.Empty };
             
             return;
         }
         
         for (var x = startX; x <= endX; x++)
-            _board[x, roomA.Y] = new Cell { Type = CellType.Empty };
+            _board[x, roomA.Y] = new Cell(new Position(x, roomA.Y)) { Type = CellType.Empty };
 
         for (var y = startY; y <= endY; y++)
-            _board[roomB.X, y] = new Cell { Type = CellType.Empty };
+            _board[roomB.X, y] = new Cell(new Position(roomB.X, y)) { Type = CellType.Empty };
     }
     
     private float GetDistance(Position p1, Position p2)

@@ -2,8 +2,9 @@
 
 public class ReturnCommand : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         context.PopInputChain();
+        return false;
     }
 }

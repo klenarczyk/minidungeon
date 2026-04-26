@@ -1,7 +1,9 @@
-﻿using MiniDungeon.Engine.Configuration;
+﻿using MiniDungeon.Actors;
+using MiniDungeon.Engine.Configuration;
 using MiniDungeon.Engine.Input;
 using MiniDungeon.Engine.Logging;
 using MiniDungeon.Engine.UI;
+using MiniDungeon.World;
 using MiniDungeon.World.Generation;
 using MiniDungeon.World.Themes;
 
@@ -27,8 +29,9 @@ public class Game : IGameContext
         Journal.Initialize(logger);
         
         IDungeonTheme theme = new WorkshopTheme();
-        
-        var layoutBuilder = new LayoutBuilder(theme);
+
+        var entityList = new List<IEntity>();
+        var layoutBuilder = new LayoutBuilder(theme, entityList);
         var instructionBuilder = new InstructionBuilder();
         
         theme.GenerationTemplate.Use(layoutBuilder);
@@ -43,9 +46,13 @@ public class Game : IGameContext
 
         Session = new GameSession(layoutBuilder.Build())
         {
-            Message = theme.EntryMessage
+            Message = theme.EntryMessage,
+            Player =
+            {
+                Name = config.PlayerName
+            },
+            Entities = entityList
         };
-        Session.Player.Name = config.PlayerName;
     }
     
     public void Run()
@@ -60,7 +67,15 @@ public class Game : IGameContext
 
             var key = Console.ReadKey(true).Key;
             var command = currentChain.Handle(key);
-            command.Execute(this);
+            var timePassed = command.Execute(this);
+
+            if (timePassed)
+            {
+                foreach (var entity in Session.Entities)
+                {
+                    entity.RandomMove(this);
+                }
+            }
             
             if (Journal.Instance.Entries.Count > 0)
                 Session.Message = Journal.Instance.Entries[^1];

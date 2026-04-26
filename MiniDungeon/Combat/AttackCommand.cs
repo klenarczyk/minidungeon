@@ -11,7 +11,7 @@ namespace MiniDungeon.Combat;
 
 public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         var session = context.Session;
         var player = session.Player;
@@ -22,17 +22,16 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
         {
             session.Message = string.Empty;
             context.PopInputChain();
-            return;
+            return false;
         }
         
         var playerDmg = enemy.TakeDamage(stats.Damage);
         if (enemy.IsDead)
         {
             Journal.Instance.Log($"{enemy.Name} is defeated!");
-            enemy.Die();
-            cell.Entity = null;
+            enemy.Die(session);
             context.PopInputChain();
-            return;
+            return false;
         }
         
         var enemyDmg = EnemyAttack(enemy, player, stats.Defense);
@@ -41,11 +40,13 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
             Journal.Instance.Log($"{player.Name} Died | Game Over!");
             session.IsRunning = false;
             context.PopInputChain();
-            return;
+            return false;
         }
 
         Journal.Instance.Log($"{player.Name}: {playerDmg}DMG, {player.Health}HP |" +
                              $" Enemy: {enemyDmg}DMG, {enemy.Health}HP");
+
+        return false;
     }
 
     private int EnemyAttack(IEntity enemy, Player player, int defense)

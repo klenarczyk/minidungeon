@@ -6,7 +6,7 @@ namespace MiniDungeon.Loot.Commands;
 
 public class InitEquipCommand(EquipmentSlot slot) : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         IHandler inputChain = new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
         var inputChainTail = inputChain;
@@ -21,5 +21,6 @@ public class InitEquipCommand(EquipmentSlot slot) : ICommand
             new SingleInputHandler(ConsoleKey.Backspace, new ReturnCommand()));
         
         context.PushInputChain(inputChain, "Equip");
+        return false;
     }
 }

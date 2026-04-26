@@ -2,9 +2,10 @@
 
 public class HideJournalCommand : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         context.PopInputChain();
         context.Session.ShowJournal = false;
+        return false;
     }
 }

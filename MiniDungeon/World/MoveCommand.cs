@@ -8,7 +8,7 @@ namespace MiniDungeon.World;
 
 public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
 {
-    public void Execute(IGameContext context)
+    public bool Execute(IGameContext context)
     {
         var session = context.Session;
         var player = session.Player;
@@ -18,16 +18,17 @@ public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
         if (IsEnemy(session, x, y, out var enemy) && enemy != null)
         {
             var attackCommandInit = new InitBattleCommand(session.Board[x, y]);
-            attackCommandInit.Execute(context);
-        } else if (!IsValidMove(session, x, y))
+            return attackCommandInit.Execute(context);
+        } 
+        
+        if (!IsValidMove(session, x, y))
         {
             Journal.Instance.Log("You bumped into a wall.");
+            return false;
         }
-        else
-        {
-            player.Position = new Position(x, y);
-        }
-        
+
+        player.Position = new Position(x, y);
+        return true;
     }
 
     private static bool IsEnemy(GameSession session, int x, int y, out IEntity? entity)
