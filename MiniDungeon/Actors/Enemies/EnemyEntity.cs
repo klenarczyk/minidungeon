@@ -1,6 +1,7 @@
 ﻿using MiniDungeon.Actors.Enemies.Behaviors;
 using MiniDungeon.Combat;
 using MiniDungeon.Engine;
+using MiniDungeon.Engine.Logging;
 using MiniDungeon.World;
 using MiniDungeon.World.Systems;
 
@@ -51,6 +52,12 @@ public class EnemyEntity(
     public void Update(INoiseSubject noise)
     {
         if (!noise.Area.Contains(Position)) return;
+        
+        var dist = Math.Abs(Position.X - noise.Origin.X) + Math.Abs(Position.Y - noise.Origin.Y);
+        Journal.Instance.Log($"[{Name}] Noise detected (Pos: {Position.X}, {Position.Y}; " +
+                             $"Src: {noise.Origin.X}, {noise.Origin.Y}; " +
+                             $"Dist: {dist})");
+        
         TargetPosition = noise.Origin;
         Path.Clear();
     }
