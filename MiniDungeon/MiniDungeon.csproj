@@ -8,9 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Engine/Configuration/config.json">
+    <None Update="Core\Configuration\config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Network\" />
+    <Folder Include="Shared\DTOs\" />
   </ItemGroup>
 
 </Project>
