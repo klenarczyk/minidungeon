@@ -23,7 +23,7 @@ public class Game : IGameContext
     public Game()
     {
         var configPath = Path.Combine(AppContext.BaseDirectory, "Core", "Configuration", "config.json");
-        var config = ConfigLoader.Load(configPath);
+        var config = Config.Load(configPath);
         
         var logger = new FileLogger(config);
         Journal.Initialize(logger);
