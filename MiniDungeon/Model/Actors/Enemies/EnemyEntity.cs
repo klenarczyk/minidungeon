@@ -121,14 +121,7 @@ public class EnemyEntity(
         var session = context.Session;
         var board = session.Board;
 
-        if (!IsValidMove(position, board)) return false;
-        
-        if (position == session.Players[0].Position)
-        {
-            var cmd = new InitBattleCommand(board[Position]);
-            cmd.Execute(context);
-            return false;
-        }
+        if (!IsValidMove(position, board) || position == session.Players[0].Position) return false;
         
         var oldPos = Position;
         Position = position;
