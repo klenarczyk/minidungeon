@@ -12,19 +12,43 @@ public class BoardDisplay : IDisplayElement
     public void Draw(RenderBuffer buffer, GameSession session)
     {
         var board = session.Board;
-        var playerPos = session.Players[0].Position;
         
         DrawFrame(buffer);
         
         for (var y = 0; y < Board.Rows; y++)
         for (var x = 0; x < Board.Columns; x++)
         {
-            var boardCell = board[x, y];
-            var displayInfo = boardCell.DisplayInfo;
-            buffer.SetChar(StartX + x + 1, StartY + y + 1, displayInfo.Character, displayInfo.Color);
+            var cell = board[x, y];
+            char c;
+            ConsoleColor color;
+
+            if (cell.Type == CellType.Wall)
+            {
+                c = '█';
+                color = ConsoleColor.Magenta;
+            } else if (cell.Entity != null)
+            {
+                c = cell.Entity.Name[0];
+                color = ConsoleColor.Red;
+            } else if (cell.Items.Count > 0)
+            {
+                c = cell.Items[0].Name[0];
+                color = ConsoleColor.White;
+            }
+            else
+            {
+                c = ' ';
+                color = ConsoleColor.White;
+            }
+            
+            buffer.SetChar(StartX + x + 1, StartY + y + 1, c, color);
         }
-        
-        buffer.SetChar(StartX + playerPos.X + 1, StartY + playerPos.Y + 1, '¶', ConsoleColor.Magenta);
+
+        for (var i = 0; i < session.Players.Count; i++)
+        {
+            var playerPos = session.Players[i].Position;
+            buffer.SetChar(StartX + playerPos.X + 1, StartY + playerPos.Y + 1, $"{i}"[0], ConsoleColor.Magenta);
+        }
     }
 
     private static void DrawFrame(RenderBuffer buffer)

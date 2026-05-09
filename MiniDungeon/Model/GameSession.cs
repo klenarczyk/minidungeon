@@ -7,7 +7,7 @@ public class GameSession(Board board)
 {
     public bool IsRunning { get; set; } = true;
     public readonly Board Board = board;
-    public List<Player> Players = [];
+    public readonly List<Player> Players = [];
     public List<IEntity> Entities { get; init; } = [];
     public string Message { get; set; } = string.Empty;
     public string InputMode { get; set; } = string.Empty;
