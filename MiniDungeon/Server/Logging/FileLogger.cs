@@ -5,9 +5,20 @@ namespace MiniDungeon.Server.Logging;
 public class FileLogger : ILogger
 {
     private readonly List<string> _entries = [];
-    public IReadOnlyList<string> Entries => _entries;
     
     private readonly string _filePath;
+    private readonly Lock _lock = new();
+
+    public IReadOnlyList<string> Entries
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _entries.ToList();
+            }
+        }
+    }
 
     public FileLogger(Config config)
     {
@@ -16,10 +27,17 @@ public class FileLogger : ILogger
             $"{config.PlayerName}-[{DateTime.Now:yyyy-MM-dd_HH-mm}].txt");
     }
     
-    public void Log(string message)
+    public void Log(string message, int? playerId = null, List<string>? playerLogs = null)
     {
-        _entries.Add(message);
-        File.AppendAllText(_filePath, message + Environment.NewLine);
+        lock (_lock)
+        {
+            playerLogs?.Add(message);
+            
+            if (playerId != null) message = $"[Player {playerId}] {message}";
+           
+            _entries.Add(message);
+            File.AppendAllText(_filePath, message + Environment.NewLine);
+        }
     }
 
     public void OnExit()

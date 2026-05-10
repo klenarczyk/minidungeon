@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text.Json;
 using MiniDungeon.Server.Controller.Input;
+using MiniDungeon.Server.Logging;
 using MiniDungeon.Server.Model;
 using MiniDungeon.Server.Model.Actors;
 using MiniDungeon.Shared.DTOs;
@@ -20,6 +21,7 @@ public class ClientHandler : IGameContext
     private readonly Stack<(IHandler Handler, string InputMode)> _inputChains = new();
     public string CurrentInputMode => _inputChains.Peek().InputMode;
     
+    public List<string> PlayerLogs { get; } = [];
     public bool ShowJournal { get; set; } = false;
 
     public ClientHandler(TcpClient tcpClient, GameServer server, int playerId)
@@ -78,11 +80,12 @@ public class ClientHandler : IGameContext
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Connection error: {ex.Message}");
+            Console.WriteLine($"Connection error: {ex.Message}.");
         }
         finally
         {
-            Console.WriteLine($"Client {PlayerId} disconnected");
+            Console.WriteLine($"Client {PlayerId} disconnected.");
+            Journal.Instance.Log($"Player {PlayerId} disconnected.");
             _tcpClient.Close();
 
             lock (_server.Lock)

@@ -26,7 +26,7 @@ public class AttackCommand(IEntity? enemy, IAttackVisitor attackVisitor) : IComm
         var playerDmg = enemy.TakeDamage(stats.Damage);
         if (enemy.IsDead)
         {
-            Journal.Instance.Log($"{enemy.Name} is defeated!");
+            Journal.Instance.Log($"{enemy.Name} is defeated!", player.Id, context.PlayerLogs);
             enemy.Die(session);
             context.PopInputChain();
             return false;
@@ -35,15 +35,15 @@ public class AttackCommand(IEntity? enemy, IAttackVisitor attackVisitor) : IComm
         var enemyDmg = EnemyAttack(enemy, player, stats.Defense);
         if (player.IsDead)
         {
-            Journal.Instance.Log($"{player.Name} Died | Game Over!");
+            Journal.Instance.Log($"{player.Name} Died | Game Over!", player.Id, context.PlayerLogs);
             enemy.BattledPlayerId = null;
             session.IsRunning = false;
             context.PopInputChain();
             return false;
         }
 
-        Journal.Instance.Log($"{player.Name}: {playerDmg}DMG, {player.Health}HP |" +
-                             $" Enemy: {enemyDmg}DMG, {enemy.Health}HP");
+        Journal.Instance.Log($"P{player.Id}: {playerDmg}DMG, {player.Health}HP |" +
+                             $" Enemy: {enemyDmg}DMG, {enemy.Health}HP", player.Id, context.PlayerLogs);
 
         return false;
     }

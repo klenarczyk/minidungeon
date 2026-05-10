@@ -19,7 +19,7 @@ public class PickUpCommand : ICommand
             return false;
         } 
         
-        Journal.Instance.Log($"You picked up the {item.Name}.");
+        Journal.Instance.Log($"You picked up the {item.Name}.", player.Id, context.PlayerLogs);
         return true;
     }
 }

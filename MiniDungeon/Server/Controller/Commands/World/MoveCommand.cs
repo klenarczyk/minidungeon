@@ -25,7 +25,7 @@ public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
         
         if (!IsValidMove(session, x, y))
         {
-            Journal.Instance.Log("You bumped into a wall.");
+            Journal.Instance.Log("You bumped into a wall.", player.Id, context.PlayerLogs);
             return false;
         }
 

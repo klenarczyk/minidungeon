@@ -21,7 +21,7 @@ public class Renderer
     
     public void Render(GameStateDto gameState)
     {
-        if (gameState.ShowJournal) RenderLogs();
+        if (gameState.ShowJournal) RenderLogs(gameState);
         else RenderGame(gameState);
     }
 
@@ -37,15 +37,14 @@ public class Renderer
         _buffer.Draw();
     }
 
-    // TODO: Add exclusive journal logs
-    private void RenderLogs()
+    private void RenderLogs(GameStateDto gameState)
     {
         _buffer.Clear();
         var currentY = 0;
     
         DrawLine("Journal Entries:");
     
-        var entries = Journal.Instance.Entries;
+        var entries = gameState.JournalLogs;
         var rows = _buffer.Height - 1;
         var startIdx = Math.Max(0, entries.Count - rows);
         

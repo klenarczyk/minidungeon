@@ -26,7 +26,7 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
 
             if (!inventory.HasSpace)
             {
-                Journal.Instance.Log("Inventory full!");
+                Journal.Instance.Log("Inventory full!", player.Id, context.PlayerLogs);
                 context.PopInputChain();
                 return false;
             }
@@ -34,7 +34,7 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             equipment.TryUnequip(eqSlot, out item);
             inventory.TryAdd(item!);
             
-            Journal.Instance.Log($"You unequipped the {item!.Name}.");
+            Journal.Instance.Log($"You unequipped the {item!.Name}.", player.Id, context.PlayerLogs);
             context.PopInputChain();
             return true;
         };
@@ -42,7 +42,7 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
         var message = item.Equip(player, eqSlot) 
             ? $"You equipped the {item.Name}." 
             : $"Cannot equip the two-handed {item.Name}.";
-        Journal.Instance.Log(message);
+        Journal.Instance.Log(message, player.Id, context.PlayerLogs);
         
         context.PopInputChain();
         return false;

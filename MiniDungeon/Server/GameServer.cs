@@ -35,7 +35,7 @@ public class GameServer
         
         // ---
         
-        var configPath = Path.Combine(AppContext.BaseDirectory, "Core", "Configuration", "config.json");
+        var configPath = Path.Combine(AppContext.BaseDirectory, "Shared", "Configuration", "config.json");
         _config = Config.Load(configPath);
         
         var logger = new FileLogger(_config);
@@ -75,7 +75,7 @@ public class GameServer
             try
             {
                 var newClient = await _listener.AcceptTcpClientAsync();
-                Console.WriteLine($"New client connected: {newClient.Client.RemoteEndPoint}");
+                Console.WriteLine($"New client connected: {newClient.Client.RemoteEndPoint}.");
 
                 bool success;
                 lock (Lock)
@@ -88,31 +88,35 @@ public class GameServer
                     }
 
                     var id = GetAvailableId();
-
-                    // TODO: Change to random free starting position
+                    
                     var newPlayer = new Player(Session.Board.StartingPosition)
                     {
                         Id = id,
                         Name = _config.PlayerName
                     };
-                    
+
                     Session.Players.Add(id, newPlayer);
                     Console.WriteLine($"Player {id} ({newClient.Client.RemoteEndPoint}) connected.");
+                    Journal.Instance.Log($"Player {id} ({newClient.Client.RemoteEndPoint}) connected.");
                     
                     var clientHandler = new ClientHandler(newClient, this, id);
                     Clients.Add(clientHandler);
                     _ = Task.Run(clientHandler.HandleClientLoop);
                     success = true;
                 }
-                
+
                 if (success) await BroadcastStateAsync();
             }
             catch (Exception ex)
             {
                 if (Session.IsRunning)
                 {
-                    Console.WriteLine($"Error while accepting connection: {ex.Message}");
+                    Console.WriteLine($"Error while accepting connection: {ex.Message}.");
                 }
+            }
+            finally
+            {
+                Journal.Instance.OnExit();
             }
             
         }
@@ -152,9 +156,9 @@ public class GameServer
     private GameStateDto GenerateSateDto(ClientHandler client) => new(
         client.Player.ToDto(),
         client.CurrentInputMode,
-        Session.EntryMessage,
+        client.PlayerLogs.Count == 0 ? Session.EntryMessage : client.PlayerLogs[^1],
         Session.Instructions,
-        Journal.Instance.Entries.ToList(),
+        client.PlayerLogs,
         client.ShowJournal,
         Session.Board.ToWallsDto(),
         Session.Board.ToItemsDto(),
