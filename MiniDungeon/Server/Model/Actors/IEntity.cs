@@ -12,6 +12,7 @@ public interface IEntity : ISpeciesObserver, INoiseObserver
     int AttackDmg { get; set; }
     int Armor { get; set; }
     Position Position { get; set; }
+    int? BattledPlayerId { get; set; }
     int TakeDamage(int damage);
     int DealDamage();
     void Die(GameSession session);

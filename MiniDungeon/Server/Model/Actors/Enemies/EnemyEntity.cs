@@ -27,6 +27,8 @@ public class EnemyEntity(
     public int AttackDmg { get; set; } = attack;
     public int Armor { get; set; } = armor;
 
+    public int? BattledPlayerId { get; set; }
+
     public int TakeDamage(int damage)
     {
         var realDmg = Math.Max(0, damage - Armor);
@@ -65,6 +67,7 @@ public class EnemyEntity(
         speciesNotifier.Notify();
         speciesNotifier.Detach(this);
         noiseNotifier?.Detach(this);
+        BattledPlayerId = null;
         session.Board[Position].Entity = null;
         session.Entities.Remove(this);
     }

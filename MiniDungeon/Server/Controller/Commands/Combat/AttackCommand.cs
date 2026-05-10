@@ -9,13 +9,12 @@ using MiniDungeon.Server.Model.World;
 
 namespace MiniDungeon.Server.Controller.Commands.Combat;
 
-public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
+public class AttackCommand(IEntity? enemy, IAttackVisitor attackVisitor) : ICommand
 {
     public bool Execute(IGameContext context)
     {
         var session = context.Session;
         var player = context.Player;
-        var enemy = cell.Entity;
         var stats = GetCombatStats(player);
         
         if (enemy == null)
@@ -37,6 +36,7 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
         if (player.IsDead)
         {
             Journal.Instance.Log($"{player.Name} Died | Game Over!");
+            enemy.BattledPlayerId = null;
             session.IsRunning = false;
             context.PopInputChain();
             return false;
@@ -48,9 +48,9 @@ public class AttackCommand(Cell cell, IAttackVisitor attackVisitor) : ICommand
         return false;
     }
 
-    private int EnemyAttack(IEntity enemy, Player player, int defense)
+    private int EnemyAttack(IEntity enemyEntity, Player player, int defense)
     {
-        var dmg = Math.Max(0, enemy.DealDamage() - defense);
+        var dmg = Math.Max(0, enemyEntity.DealDamage() - defense);
         player.Health -= dmg;
         return dmg;
     }

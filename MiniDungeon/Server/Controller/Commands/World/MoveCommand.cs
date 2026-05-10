@@ -18,7 +18,8 @@ public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
 
         if (IsEnemy(session, x, y, out var enemy) && enemy != null)
         {
-            var attackCommandInit = new InitBattleCommand(session.Board[x, y]);
+            if (enemy.BattledPlayerId != null) return false;
+            var attackCommandInit = new InitBattleCommand(enemy);
             return attackCommandInit.Execute(context);
         } 
         

@@ -67,6 +67,7 @@ public class ClientHandler : IGameContext
                     {
                         foreach (var entity in Session.Entities)
                         {
+                            if (entity.BattledPlayerId != null) continue;
                             entity.Move(this);
                         }
                     }
@@ -86,9 +87,17 @@ public class ClientHandler : IGameContext
 
             lock (_server.Lock)
             {
+                foreach (var entity in Session.Entities)
+                {
+                    if (entity.BattledPlayerId != PlayerId) continue;
+                    entity.BattledPlayerId = null;
+                }
+                
                 _server.Clients.Remove(this);
                 _server.Session.Players.Remove(PlayerId);
             }
+            
+            await _server.BroadcastStateAsync();
         }
     }
 
