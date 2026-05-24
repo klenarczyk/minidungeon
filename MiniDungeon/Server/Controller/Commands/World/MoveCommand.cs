@@ -1,31 +1,35 @@
-﻿using MiniDungeon.Server.Controller.Commands.Combat;
-using MiniDungeon.Server.Controller.Commands.Core;
-using MiniDungeon.Server.Logging;
-using MiniDungeon.Server.Model;
+﻿using MiniDungeon.Server.Model;
 using MiniDungeon.Server.Model.Actors;
 using MiniDungeon.Server.Model.World;
+using MiniDungeon.Shared.DTOs.Commands;
+using MiniDungeon.Shared.Logging;
 
 namespace MiniDungeon.Server.Controller.Commands.World;
 
-public class MoveCommand(int deltaX = 0, int deltaY = 0) : ICommand
+public class MoveCommand(MoveArgs args) : IServerCommand
 {
-    public bool Execute(IGameContext context)
+    public bool Execute(IServerContext context)
     {
         var session = context.Session;
         var player = context.Player;
-        var x = player.Position.X + deltaX;
-        var y = player.Position.Y + deltaY;
+        var x = player.Position.X + args.DeltaX;
+        var y = player.Position.Y + args.DeltaY;
 
+        if (player.IsBattling) return false;
+        
         if (IsEnemy(session, x, y, out var enemy) && enemy != null)
         {
-            if (enemy.BattledPlayerId != null) return false;
-            var attackCommandInit = new InitBattleCommand(enemy);
-            return attackCommandInit.Execute(context);
+            if (enemy.BattledPlayerId != null && enemy.BattledPlayerId != player.Id) return false;
+
+            player.IsBattling = true;
+            enemy.BattledPlayerId = player.Id;
+            Journal.Instance.Log($"Attacked {enemy.Name}.", player.Id, context.PlayerLogs);
+            return false;
         } 
         
         if (!IsValidMove(session, x, y))
         {
-            Journal.Instance.Log("You bumped into a wall.", player.Id, context.PlayerLogs);
+            Journal.Instance.Log("Bumped into a wall.", player.Id, context.PlayerLogs);
             return false;
         }
 

@@ -1,11 +1,11 @@
 ﻿using MiniDungeon.Server.Controller.Commands.Core;
-using MiniDungeon.Server.Logging;
+using MiniDungeon.Shared.Logging;
 
 namespace MiniDungeon.Server.Controller.Commands.Loot;
 
-public class PickUpCommand : ICommand
+public class PickUpCommand : IServerCommand
 {
-    public bool Execute(IGameContext context)
+    public bool Execute(IServerContext context)
     {
         var session = context.Session;
         var player = context.Player;
@@ -19,7 +19,7 @@ public class PickUpCommand : ICommand
             return false;
         } 
         
-        Journal.Instance.Log($"You picked up the {item.Name}.", player.Id, context.PlayerLogs);
+        Journal.Instance.Log($"Picked up the {item.Name}.", player.Id, context.PlayerLogs);
         return true;
     }
 }

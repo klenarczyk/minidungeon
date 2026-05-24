@@ -16,5 +16,5 @@ public interface IEntity : ISpeciesObserver, INoiseObserver
     int TakeDamage(int damage);
     int DealDamage();
     void Die(GameSession session);
-    void Move(IGameContext context);
+    void Move(IServerContext context);
 }

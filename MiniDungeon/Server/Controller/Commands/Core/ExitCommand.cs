@@ -1,10 +1,10 @@
 ﻿namespace MiniDungeon.Server.Controller.Commands.Core;
 
-public class ExitCommand : ICommand
+public class ExitCommand : IServerCommand
 {
-    public bool Execute(IGameContext context)
+    public bool Execute(IServerContext context)
     {
-        context.Session.IsRunning = false;
+        context.IsRunning = false;
         return false;
     }
 }

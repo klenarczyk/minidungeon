@@ -1,16 +1,15 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
-using MiniDungeon.Server.Controller.Commands.Core;
-using MiniDungeon.Server.Controller.Input;
-using MiniDungeon.Server.Logging;
+using MiniDungeon.Server.Controller;
+using MiniDungeon.Server.Controller.Actions;
 using MiniDungeon.Server.Model;
 using MiniDungeon.Server.Model.Actors;
 using MiniDungeon.Server.Model.World.Generation;
 using MiniDungeon.Server.Model.World.Themes;
-using MiniDungeon.Server.Network;
 using MiniDungeon.Shared.Configuration;
-using MiniDungeon.Shared.DTOs;
+using MiniDungeon.Shared.DTOs.State;
+using MiniDungeon.Shared.Logging;
 
 namespace MiniDungeon.Server;
 
@@ -22,7 +21,7 @@ public class GameServer
     public readonly Lock Lock = new();
     
     public GameSession Session { get; }
-    public IHandler BaseInputChain { get; }
+    public IEnvelopeHandler CommandChain { get; }
 
     public List<ClientHandler> Clients { get; } = [];
     private const int ServerCapacity = 9;
@@ -45,21 +44,19 @@ public class GameServer
 
         var entityList = new List<IEntity>();
         var layoutBuilder = new LayoutBuilder(theme, entityList);
-        var instructionBuilder = new InstructionBuilder();
+        var actionBuilder = new ActionBuilder();
         
         theme.GenerationTemplate.Use(layoutBuilder);
-        theme.GenerationTemplate.Use(instructionBuilder);
-
-        var baseInputChain = instructionBuilder.GetInputChain();
-        BaseInputChain = baseInputChain ?? new SingleInputHandler(ConsoleKey.Escape, new ExitCommand());
+        theme.GenerationTemplate.Use(actionBuilder);
+        
+        CommandChain = actionBuilder.GetCommandChain() ?? new ExitParser();
         
         var board = layoutBuilder.Build();
         
         Session = new GameSession(board)
         {
+            ActionList = actionBuilder.ActionList,
             EntryMessage = theme.EntryMessage,
-            Instructions = instructionBuilder.GetInstructions(),
-            
             Entities = entityList,
         };
     }
@@ -67,12 +64,11 @@ public class GameServer
     public async Task Run()
     {
         _listener.Start();
-        Session.IsRunning = true;
         Console.WriteLine($"Server is running on port {_port}...");
 
-        while (Session.IsRunning)
+        try
         {
-            try
+            while (true)
             {
                 var newClient = await _listener.AcceptTcpClientAsync();
                 Console.WriteLine($"New client connected: {newClient.Client.RemoteEndPoint}.");
@@ -88,7 +84,6 @@ public class GameServer
                     }
 
                     var id = GetAvailableId();
-                    
                     var newPlayer = new Player(Session.Board.StartingPosition)
                     {
                         Id = id,
@@ -99,7 +94,7 @@ public class GameServer
                     Console.WriteLine($"Player {id} ({newClient.Client.RemoteEndPoint}) connected.");
                     Journal.Instance.Log($"Player {id} ({newClient.Client.RemoteEndPoint}) connected.");
                     
-                    var clientHandler = new ClientHandler(newClient, this, id);
+                    var clientHandler = new ClientHandler(newClient, this, newPlayer);
                     Clients.Add(clientHandler);
                     _ = Task.Run(clientHandler.HandleClientLoop);
                     success = true;
@@ -107,18 +102,14 @@ public class GameServer
 
                 if (success) await BroadcastStateAsync();
             }
-            catch (Exception ex)
-            {
-                if (Session.IsRunning)
-                {
-                    Console.WriteLine($"Error while accepting connection: {ex.Message}.");
-                }
-            }
-            finally
-            {
-                Journal.Instance.OnExit();
-            }
-            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Server error: {ex.Message}.");
+        }
+        finally
+        {
+            Journal.Instance.OnExit();
         }
     }
     
@@ -136,32 +127,40 @@ public class GameServer
     public async Task BroadcastStateAsync()
     {
         List<Task> tasks = [];
+        List<(ClientHandler client, string json)> payloads = [];
 
-        List<ClientHandler> snapshot;
         lock (Lock)
         {
-            snapshot = Clients.ToList();
+            foreach (var client in Clients)
+            {
+                if (!client.IsRunning) continue;
+            
+                var dto = GenerateSateDto(client); 
+                var json = JsonSerializer.Serialize(dto);
+                payloads.Add((client, json));
+            }
         }
 
-        foreach (var client in snapshot)
+        foreach (var payload in payloads)
         {
-            var dto = GenerateSateDto(client);
-            var json = JsonSerializer.Serialize(dto);
-            tasks.Add(client.SendMessageAsync(json));
+            tasks.Add(payload.client.SendMessageAsync(payload.json));
         }
-        
+    
         await Task.WhenAll(tasks);
     }
-    
-    private GameStateDto GenerateSateDto(ClientHandler client) => new(
-        client.Player.ToDto(),
-        client.CurrentInputMode,
-        client.PlayerLogs.Count == 0 ? Session.EntryMessage : client.PlayerLogs[^1],
-        Session.Instructions,
-        client.PlayerLogs,
-        client.ShowJournal,
-        Session.Board.ToWallsDto(),
-        Session.Board.ToItemsDto(),
-        Session.Entities.ToDto(),
-        Session.Players.ToDto());
+
+    private GameStateDto GenerateSateDto(ClientHandler client)
+    {
+        var logs = client.PlayerLogs.ToList();
+        client.PlayerLogs.Clear();
+        
+        return new GameStateDto(
+            client.Player.ToDto(),
+            logs,
+            Session.Board.ToWallsDto(),
+            Session.Board.ToItemsDto(),
+            Session.Entities.ToDto(),
+            Session.Players.ToDto()
+            );
+    }
 }

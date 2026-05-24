@@ -1,7 +1,7 @@
-﻿using MiniDungeon.Server.Logging;
-using MiniDungeon.Server.Model.Actors.Enemies.Behaviors;
+﻿using MiniDungeon.Server.Model.Actors.Enemies.Behaviors;
 using MiniDungeon.Server.Model.World;
 using MiniDungeon.Server.Model.World.Systems;
+using MiniDungeon.Shared.Logging;
 
 namespace MiniDungeon.Server.Model.Actors.Enemies;
 
@@ -72,13 +72,13 @@ public class EnemyEntity(
         session.Entities.Remove(this);
     }
 
-    public void Move(IGameContext context)
+    public void Move(IServerContext context)
     {
         if (TargetPosition == null) RandomMove(context);
         else MoveToTarget(context);
     }
     
-    private void RandomMove(IGameContext context)
+    private void RandomMove(IServerContext context)
     {
         var random = new Random();
 
@@ -91,7 +91,7 @@ public class EnemyEntity(
         }
     }
 
-    private void MoveToTarget(IGameContext context)
+    private void MoveToTarget(IServerContext context)
     {
         if (TargetPosition == null) return;
 
@@ -117,7 +117,7 @@ public class EnemyEntity(
         }
     }
     
-    private bool Move(IGameContext context, Position position)
+    private bool Move(IServerContext context, Position position)
     {
         var session = context.Session;
         var board = session.Board;

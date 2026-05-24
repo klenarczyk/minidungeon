@@ -1,33 +1,32 @@
 ﻿using MiniDungeon.Server.Controller.Commands.Core;
-using MiniDungeon.Server.Logging;
 using MiniDungeon.Server.Model.Loot;
+using MiniDungeon.Shared.DTOs.Commands;
+using MiniDungeon.Shared.Logging;
 
 namespace MiniDungeon.Server.Controller.Commands.Loot;
 
-public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
+public class EquipCommand(EquipArgs args) : IServerCommand
 {
-    public bool Execute(IGameContext context)
+    public bool Execute(IServerContext context)
     {
         var player = context.Player;
         
         var inventory = player.Inventory;
+        var invSlot = args.InventorySlot;
+        
         var equipment = player.Equipment;
+        var eqSlot = args.EquipmentSlot;
         
         inventory.SelectedSlot = invSlot;
         var item = inventory.SelectedItem;
 
         if (item == null)
         {
-            if (equipment[eqSlot] == null)
-            {
-                context.PopInputChain();
-                return false;
-            }
+            if (equipment[eqSlot] == null) return false;
 
             if (!inventory.HasSpace)
             {
                 Journal.Instance.Log("Inventory full!", player.Id, context.PlayerLogs);
-                context.PopInputChain();
                 return false;
             }
 
@@ -35,7 +34,6 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             inventory.TryAdd(item!);
             
             Journal.Instance.Log($"You unequipped the {item!.Name}.", player.Id, context.PlayerLogs);
-            context.PopInputChain();
             return true;
         };
 
@@ -44,7 +42,6 @@ public class EquipCommand(EquipmentSlot eqSlot, int invSlot) : ICommand
             : $"Cannot equip the two-handed {item.Name}.";
         Journal.Instance.Log(message, player.Id, context.PlayerLogs);
         
-        context.PopInputChain();
         return false;
     }
 }

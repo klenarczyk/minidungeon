@@ -1,4 +1,5 @@
 ﻿using MiniDungeon.Shared.DTOs;
+using MiniDungeon.Shared.DTOs.State;
 
 namespace MiniDungeon.Client.View.Displays;
 
@@ -8,7 +9,7 @@ public class SidebarDisplay : IDisplayElement
     private const int StartY = 0;
     private const int MaxWidth = 60;
     
-    public void Draw(RenderBuffer buffer, GameStateDto gameState)
+    public void Draw(RenderBuffer buffer, IClientContext context, GameStateDto gameState)
     {
         var player = gameState.Player;
         List<ItemDto> cellItems = [];

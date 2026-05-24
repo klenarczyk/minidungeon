@@ -1,6 +1,7 @@
 ﻿using MiniDungeon.Client.View.Displays;
-using MiniDungeon.Server.Logging;
 using MiniDungeon.Shared.DTOs;
+using MiniDungeon.Shared.DTOs.State;
+using MiniDungeon.Shared.Logging;
 
 namespace MiniDungeon.Client.View;
 
@@ -8,6 +9,9 @@ public class Renderer
 {
     private readonly RenderBuffer _buffer;
     private readonly List<IDisplayElement> _components = [];
+
+    private Lock _renderLock = new();
+    private GameStateDto? _loadedGameState;
 
     public Renderer(int width, int height)
     {
@@ -19,32 +23,38 @@ public class Renderer
         _components.Add(new MessageDisplay());
     }
     
-    public void Render(GameStateDto gameState)
+    public void Render(IClientContext context, GameStateDto? gameState = null)
     {
-        if (gameState.ShowJournal) RenderLogs(gameState);
-        else RenderGame(gameState);
+        lock (_renderLock)
+        {
+            if (gameState != null) _loadedGameState = gameState;
+            if (_loadedGameState == null) return;
+        
+            if (context.ShowJournal) RenderLogs();
+            else RenderGame(context, _loadedGameState);
+        }
     }
 
-    private void RenderGame(GameStateDto gameState)
+    private void RenderGame(IClientContext context, GameStateDto gameState)
     {
         _buffer.Clear();
 
         foreach (var element in _components)
         {
-            element.Draw(_buffer, gameState);
+            element.Draw(_buffer, context, gameState);
         }
         
         _buffer.Draw();
     }
 
-    private void RenderLogs(GameStateDto gameState)
+    private void RenderLogs()
     {
         _buffer.Clear();
         var currentY = 0;
     
         DrawLine("Journal Entries:");
     
-        var entries = gameState.JournalLogs;
+        var entries = Journal.Instance.Entries;
         var rows = _buffer.Height - 1;
         var startIdx = Math.Max(0, entries.Count - rows);
         
@@ -57,4 +67,6 @@ public class Renderer
         void DrawLine(string text)
             => _buffer.SetString(0, currentY++, text.PadRight(_buffer.Width));
     }
+
+    public void UpdateInstructions(string instructions) => _buffer.Instructions = instructions;
 } 

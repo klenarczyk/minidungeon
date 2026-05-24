@@ -1,5 +1,6 @@
 ﻿using MiniDungeon.Server.Model.World;
 using MiniDungeon.Shared.DTOs;
+using MiniDungeon.Shared.DTOs.State;
 
 namespace MiniDungeon.Client.View.Displays;
 
@@ -9,7 +10,7 @@ public class BoardDisplay : IDisplayElement
     private const int StartY = 0;
     private const int Width = Board.Columns + 2;
     
-    public void Draw(RenderBuffer buffer, GameStateDto gameState)
+    public void Draw(RenderBuffer buffer, IClientContext context, GameStateDto gameState)
     {
         DrawFrame(buffer);
 

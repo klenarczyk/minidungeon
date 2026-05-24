@@ -42,7 +42,7 @@ switch (mode)
         Console.Title = $"MiniDungeon ({ip}:{port})";
     
         var client = new GameClient(ip, port);
-        client.Run();
+        await client.Run();
         break;
     }
     default:

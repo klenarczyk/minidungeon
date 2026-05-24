@@ -23,6 +23,8 @@ public class Player
     public int Dexterity => Math.Max(0, BaseAttributes.Dexterity + Equipment.GetDexterityBonus());
     public int Luck => Math.Max(0, BaseAttributes.Luck + Equipment.GetLuckBonus());
 
+    public bool IsBattling { get; set; } = false;
+    
     public Player(Position startingPosition)
     {
         Position = startingPosition;
